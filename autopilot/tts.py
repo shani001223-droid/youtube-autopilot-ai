@@ -26,6 +26,7 @@ def check_voice(model, allow_noncommercial=False):
 
 def split_sentences(text):
     parts = re.split(r'(?<=[.!?])\s+(?=["\u201c\'(]?[A-Z])', text.strip())
+    parts = [q for p in parts for q in re.split(r'(?<=[।॥])\s+', p)]
     return [p.strip() for p in parts if p.strip()]
 
 
@@ -107,3 +108,11 @@ def piper_synth(voice, data_dir="voices", runner=subprocess.run, allow_noncommer
         if not Path(out_path).is_file() or wav_duration(out_path) <= 0:
             raise RuntimeError("Piper produced no usable narration")
     return synth
+
+
+def hindi_preview_synth(text, out_path):
+    """Offline smoke-test voice only. Not intended as final cinematic narration."""
+    r = subprocess.run(["espeak-ng", "-v", "hi", "-s", "145", "-w", str(out_path), "--stdin"],
+                       input=text, text=True, capture_output=True, timeout=120)
+    if r.returncode != 0 or not Path(out_path).is_file() or wav_duration(out_path) <= 0:
+        raise RuntimeError("Hindi preview speech failed; check espeak-ng installation")
