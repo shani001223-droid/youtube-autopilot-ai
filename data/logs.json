@@ -194,5 +194,12 @@
   "stage": "seo",
   "message": "12 tags; description 445 chars; uncovered queries: ['supernatural story', 'The White Noise Registry']",
   "run": "20261125124718"
+ },
+ {
+  "t": "2026-11-25T13:03:07Z",
+  "level": "error",
+  "stage": "research",
+  "message": "GeminiError: all Gemini models failed: gemini-flash-lite-latest: HTTP 503 temporary server error; retries exhausted; gemini-flash-latest: HTTP 429 daily quota used up",
+  "run": "20261125130210"
  }
 ]
