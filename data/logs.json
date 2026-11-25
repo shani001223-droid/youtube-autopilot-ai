@@ -516,5 +516,110 @@
   "stage": "seo",
   "message": "6 tags; description 1479 chars; uncovered queries: ['urban mystery story']",
   "run": "20261125152018"
+ },
+ {
+  "t": "2026-11-25T15:41:00Z",
+  "level": "info",
+  "stage": "research",
+  "message": "topic 'The ink that dried backward' | psychological | slow reveal through a letter | 0 trend titles",
+  "run": "20261125154050"
+ },
+ {
+  "t": "2026-11-25T15:41:36Z",
+  "level": "warning",
+  "stage": "script",
+  "message": "Gemini unavailable: all Gemini models failed: gemini-flash-lite-latest: HTTP 503 temporary server error; retries exhausted; gemini-flash-latest: HTTP 503 temporary server error; retries exhausted; trying original story reserve",
+  "run": "20261125154050"
+ },
+ {
+  "t": "2026-11-25T15:41:36Z",
+  "level": "info",
+  "stage": "script",
+  "message": "Using original reserve: The Clock in the Locked Station",
+  "run": "20261125154050"
+ },
+ {
+  "t": "2026-11-25T15:41:36Z",
+  "level": "info",
+  "stage": "script",
+  "message": "5 scenes; hook score 44 (WEAK, The Question)",
+  "run": "20261125154050"
+ },
+ {
+  "t": "2026-11-25T15:41:45Z",
+  "level": "info",
+  "stage": "voice",
+  "message": "11 sentences, 40.9s narration, longest gap 0.00s",
+  "run": "20261125154050"
+ },
+ {
+  "t": "2026-11-25T15:41:45Z",
+  "level": "warning",
+  "stage": "footage",
+  "message": "PEXELS_API_KEY missing; using keyless licensed media search",
+  "run": "20261125154050"
+ },
+ {
+  "t": "2026-11-25T15:41:47Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 1: commons_video",
+  "run": "20261125154050"
+ },
+ {
+  "t": "2026-11-25T15:41:48Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 2: commons_video",
+  "run": "20261125154050"
+ },
+ {
+  "t": "2026-11-25T15:41:49Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 3: commons_photo",
+  "run": "20261125154050"
+ },
+ {
+  "t": "2026-11-25T15:41:51Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 4: commons_photo",
+  "run": "20261125154050"
+ },
+ {
+  "t": "2026-11-25T15:41:52Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 5: commons_photo",
+  "run": "20261125154050"
+ },
+ {
+  "t": "2026-11-25T15:41:52Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "2/5 moving stock clips; 3 animated licensed photos; 0 original illustrated scenes",
+  "run": "20261125154050"
+ },
+ {
+  "t": "2026-11-25T15:42:33Z",
+  "level": "info",
+  "stage": "render",
+  "message": "1080x1920 41.5s audio=True",
+  "run": "20261125154050"
+ },
+ {
+  "t": "2026-11-25T15:42:33Z",
+  "level": "info",
+  "stage": "thumbnail",
+  "message": "title score 94; thumbnail text 'NOT POSSIBLE'",
+  "run": "20261125154050"
+ },
+ {
+  "t": "2026-11-25T15:42:33Z",
+  "level": "info",
+  "stage": "seo",
+  "message": "6 tags; description 1541 chars; uncovered queries: ['psychological story']",
+  "run": "20261125154050"
  }
 ]
