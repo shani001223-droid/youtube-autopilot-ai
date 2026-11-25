@@ -145,5 +145,54 @@
   "stage": "voice",
   "message": "RuntimeError: piper failed: /lib/python3.12/site-packages/piper/__main__.py\", line 258, in <module>\n    main()\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/piper/__main__.py\", line 143, in main\n    raise ValueError(\nValueError: Unable to find voice: en_US-john-medium (use piper.download_voices)\n",
   "run": "20261125123926"
+ },
+ {
+  "t": "2026-11-25T12:48:57Z",
+  "level": "info",
+  "stage": "research",
+  "message": "topic 'The White Noise Registry' | supernatural | twist in the last line | 0 trend titles",
+  "run": "20261125124718"
+ },
+ {
+  "t": "2026-11-25T12:49:08Z",
+  "level": "info",
+  "stage": "script",
+  "message": "6 scenes; hook score 56 (WORKABLE, The Question)",
+  "run": "20261125124718"
+ },
+ {
+  "t": "2026-11-25T12:49:14Z",
+  "level": "info",
+  "stage": "voice",
+  "message": "9 sentences, 57.4s narration, longest gap 0.00s",
+  "run": "20261125124718"
+ },
+ {
+  "t": "2026-11-25T12:49:14Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "0/6 licensed clips; 6 generated fallback",
+  "run": "20261125124718"
+ },
+ {
+  "t": "2026-11-25T12:49:47Z",
+  "level": "info",
+  "stage": "render",
+  "message": "1080x1920 58.0s audio=True",
+  "run": "20261125124718"
+ },
+ {
+  "t": "2026-11-25T12:49:47Z",
+  "level": "info",
+  "stage": "thumbnail",
+  "message": "title score 100; thumbnail text 'The 1970s Reel'",
+  "run": "20261125124718"
+ },
+ {
+  "t": "2026-11-25T12:49:47Z",
+  "level": "info",
+  "stage": "seo",
+  "message": "12 tags; description 445 chars; uncovered queries: ['supernatural story', 'The White Noise Registry']",
+  "run": "20261125124718"
  }
 ]

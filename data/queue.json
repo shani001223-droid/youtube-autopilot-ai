@@ -137,5 +137,97 @@
   "created_at": "2026-11-25T12:39:26Z",
   "failed_stage": "voice",
   "error": "RuntimeError: piper failed: /lib/python3.12/site-packages/piper/__main__.py\", line 258, in <module>\n    main()\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/piper/__main__.py\", line 143, in main\n    raise ValueError(\nValueError: Unable to find voice: en_US-john-medium (use piper.download_voices)\n"
+ },
+ {
+  "status": "awaiting_approval",
+  "mode": "short",
+  "run_id": "20261125124718",
+  "demo": false,
+  "id": "20261125-124718-66b2",
+  "created_at": "2026-11-25T12:47:18Z",
+  "topic": "The White Noise Registry",
+  "premise": "An archivist digitizing 1970s audio reels from an abandoned parapsychology lab discovers faint background voices narrating trivial domestic accidents moments before they happen in her home. Desperate to silence the eerie broadcast, she tracks down the original master tape and recognizes the voice as her own speaking from decades before she was born.",
+  "variety": {
+   "subgenre": "supernatural",
+   "structure": "twist in the last line",
+   "visual_style": "sea mist and lighthouse",
+   "music_mood": "hollow"
+  },
+  "title": "Tape 99: The Static Future",
+  "thumb_text": "The 1970s Reel",
+  "title_issues": [],
+  "description": "An archivist digitizing 1970s parapsychology audio reels discovers background voices predicting her own trivial household accidents, leading to a chilling temporal paradox.\nA new original original english horror & mystery stories - subscribe so you never miss the next one.\n\nThis is a work of fiction. The story and narration are AI-assisted; every name and event is invented.\n\nMusic: generated for this channel.\n\n#horrorstories #shorts #mystery",
+  "tags": [
+   "horror stories",
+   "audio tape horror",
+   "creepy archives",
+   "analog horror",
+   "ghost stories",
+   "paranormal mystery",
+   "short horror",
+   "creepy audio",
+   "spooky tales",
+   "psychological horror",
+   "supernatural",
+   "short story"
+  ],
+  "hook": "What if the voice narrating your kitchen accident was recorded fifty years before you were born?",
+  "hook_score": 56,
+  "hook_formula": "The Question",
+  "script": {
+   "scenes": [
+    {
+     "narration": "Heavy coastal fog pressed against the archives window as the magnetic tape hissed through the vintage deck.",
+     "visual_query": "foggy lighthouse window",
+     "mood": "dread"
+    },
+    {
+     "narration": "Beneath the test subjects flat monotone, a second, fainter voice murmured about a broken ceramic mug.",
+     "visual_query": "spinning audio reels",
+     "mood": "dread"
+    },
+    {
+     "narration": "Three seconds later, hot ceramic shattered against the concrete floor by my own trembling heels.",
+     "visual_query": "cracked tiled floor",
+     "mood": "dread"
+    },
+    {
+     "narration": "I isolated the background frequency, tracing the seventy-four master tape back to its sealed vault origin.",
+     "visual_query": "dusty metal shelves",
+     "mood": "dread"
+    },
+    {
+     "narration": "The original researcher listed no staff, only a single vocal specimen recorded decades before my birth.",
+     "visual_query": "yellowed paper ledger",
+     "mood": "dread"
+    },
+    {
+     "narration": "I played the master track, listening to the vintage microphone capture my own voice explaining how I found it.",
+     "visual_query": "vintage reel deck",
+     "mood": "dread"
+    }
+   ],
+   "closing_line": "The machine recorded me before I was born.",
+   "loop_line": "If an audio archive records an accident before it happens, did the mistake ever truly belong to you?"
+  },
+  "credits": [],
+  "video_info": {
+   "width": 1080,
+   "height": 1920,
+   "duration": 57.966667,
+   "has_video": true,
+   "has_audio": true
+  },
+  "qa": {
+   "ok": true,
+   "gap_seconds": 0.0
+  },
+  "files": {
+   "video": "out/20261125-124718-66b2/video.mp4",
+   "thumb": "out/20261125-124718-66b2/thumb.jpg"
+  },
+  "preview_url": "https://github.com/shani001223-droid/youtube-autopilot-ai/releases/download/preview-20261125-124718-66b2/video.mp4",
+  "error": null,
+  "thumb_url": "https://github.com/shani001223-droid/youtube-autopilot-ai/releases/download/preview-20261125-124718-66b2/thumb.jpg"
  }
 ]
