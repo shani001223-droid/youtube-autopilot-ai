@@ -61,11 +61,18 @@ def run_generate(settings, store, deps, workdir, run_id=None, demo=False):
         stage = "footage"
         clips = footage.select_clips(deps.pexels, queries, durations, out / "clips", log=lambda l, m: log(l, "footage", m)) if deps.pexels \
             else [{"path": None, "video_id": None, "credit": None} for _ in queries]
-        got = sum(1 for c in clips if c["path"]); log("info", "footage", f"{got}/{len(clips)} licensed clips; {len(clips) - got} generated fallback")
+        if not demo:
+            from .commons_media import fill_missing
+            if not deps.pexels:
+                log("warning", "footage", "PEXELS_API_KEY missing; using keyless licensed media search")
+            clips = fill_missing(clips, queries, out / "clips", log=lambda l,m: log(l,"footage",m))
+        got = sum(1 for c in clips if c.get("kind") in ("stock_video", "commons_video") or (c.get("path") and not c.get("kind")))
+        photos = sum(1 for c in clips if c.get("kind") == "commons_photo")
+        log("info", "footage", f"{got}/{len(clips)} moving stock clips; {photos} animated licensed photos; {len(clips)-got-photos} original illustrated scenes")
 
         stage = "render"; mus = out / "music.wav"; music.make_ambient(sum(durations) + 1, mus, variety["music_mood"], deps.rng.randint(0, 99), runner=deps.runner)
         ass = out / "captions.ass"; subtitles.write_ass(ass, subtitles.word_timings(vo["timeline"])); video = out / "video.mp4"
-        info = render.render_video([{"path": c["path"], "duration": d} for c, d in zip(clips, durations)], vo["wav"], mus, ass, video, out / "work",
+        info = render.render_video([{"path": c["path"], "duration": d, "query": q} for c, d, q in zip(clips, durations, queries)], vo["wav"], mus, ass, video, out / "work",
                                    runner=deps.runner, music_volume=settings["audio"]["music_volume"])
         log("info", "render", f"{info['width']}x{info['height']} {info['duration']:.1f}s audio={info['has_audio']}")
 
@@ -83,7 +90,7 @@ def run_generate(settings, store, deps, workdir, run_id=None, demo=False):
         return store.update(iid, status="awaiting_approval", topic=topic["topic"], premise=topic.get("premise"), variety=variety, title=choice["title"],
                             thumb_text=choice["thumb_text"], title_issues=choice["issues"], description=desc, tags=tags, hook=hook["hook"], hook_score=hook["score"],
                             hook_formula=hook["formula"], script={"scenes": script["scenes"], "closing_line": script["closing_line"], "loop_line": script["loop_line"]},
-                            credits=credits, video_info=info, qa={"ok": qa_ok, "gap_seconds": dead["gap_seconds"]}, files={"video": str(video), "thumb": str(thumb)},
+                            credits=credits, video_info=info, visual_sources=[c.get("kind", "stock_video" if c.get("path") else "illustration") for c in clips], qa={"ok": qa_ok, "gap_seconds": dead["gap_seconds"]}, files={"video": str(video), "thumb": str(thumb)},
                             preview_url=None, error=None)
     except Exception as ex:
         msg = redact(f"{type(ex).__name__}: {ex}"); log("error", stage, msg)
