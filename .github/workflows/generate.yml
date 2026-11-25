@@ -7,6 +7,11 @@ on:
     - cron: "17 3 * * *"          # daily 03:17 UTC (off the hour on purpose: top-of-hour runs are delayed most)
   workflow_dispatch:
     inputs:
+      profile:
+        description: "Channel preview profile (manual review only for new channels)"
+        type: choice
+        options: [legacy, hindi_shorts, english_long]
+        default: legacy
       demo:
         description: "Smoke test: fake script, tone voice, generated visuals. Uses no API keys."
         type: boolean
@@ -19,7 +24,7 @@ concurrency:
 jobs:
   generate:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
         with:
@@ -29,7 +34,7 @@ jobs:
           python-version: "3.12"
           cache: pip
       - name: System packages
-        run: sudo apt-get update -y && sudo apt-get install -y ffmpeg fonts-dejavu-core
+        run: sudo apt-get update -y && sudo apt-get install -y ffmpeg fonts-dejavu-core fonts-noto-core espeak-ng
       - name: Python packages
         env:
           DEMO: ${{ inputs.demo }}
@@ -37,7 +42,7 @@ jobs:
           pip install -r requirements.txt
           if [ "$DEMO" != "true" ]; then pip install -r requirements-voice.txt; fi
       - name: Recovery and visual regression tests
-        run: python -m unittest tests.test_llm tests.test_recovery tests.test_visual_sources tests.test_scriptgen tests.test_research tests.test_cinematic_upgrade -v
+        run: python -m unittest tests.test_llm tests.test_recovery tests.test_visual_sources tests.test_scriptgen tests.test_research tests.test_cinematic_upgrade tests.test_channel_profiles -v
       - name: Cache Piper voices
         uses: actions/cache@v4
         with:
@@ -46,6 +51,7 @@ jobs:
       - name: Generate
         id: gen
         env:
+          PROFILE: ${{ inputs.profile || 'legacy' }}
           DEMO: ${{ inputs.demo }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
@@ -55,7 +61,7 @@ jobs:
         run: |
           ARGS=""
           if [ "$DEMO" = "true" ]; then ARGS="--demo"; fi
-          python -m autopilot generate $ARGS
+          python -m autopilot generate --profile "$PROFILE" $ARGS
       - name: Publish preview (GitHub Release, deleted after review)
         if: steps.gen.outputs.STATUS == 'awaiting_approval'
         env:
