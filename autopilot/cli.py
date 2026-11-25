@@ -30,7 +30,7 @@ def _out(**kv):
 def main(argv=None, env=None):
     env = os.environ if env is None else env
     ap = argparse.ArgumentParser(prog="autopilot"); ap.add_argument("--data", default="data"); sub = ap.add_subparsers(dest="cmd", required=True)
-    g = sub.add_parser("generate"); g.add_argument("--demo", action="store_true"); g.add_argument("--workdir", default="out"); g.add_argument("--profile", choices=["legacy", "hindi_shorts", "english_long"], default="legacy")
+    g = sub.add_parser("generate"); g.add_argument("--demo", action="store_true"); g.add_argument("--workdir", default="out"); g.add_argument("--profile", choices=["legacy", "hindi_shorts", "english_long"], default="legacy"); g.add_argument("--scheduled", action="store_true")
     p = sub.add_parser("publish"); p.add_argument("--id", required=True); p.add_argument("--action", required=True); p.add_argument("--video-url"); p.add_argument("--workdir", default="out")
     s = sub.add_parser("settings-action"); s.add_argument("--action", required=True, choices=["approve_sample", "enable_public", "disable_public"]); s.add_argument("--id")
     r = sub.add_parser("set-preview"); r.add_argument("--id", required=True); r.add_argument("--url", required=True); r.add_argument("--thumb-url")
@@ -50,16 +50,27 @@ def main(argv=None, env=None):
     now = datetime.now(timezone.utc)
 
     if a.cmd == "generate":
+        from .production import should_generate
+        if a.scheduled and not should_generate(store.items(), a.profile):
+            print("Review backlog limit reached; skipping scheduled generation")
+            _out(ITEM_ID="", STATUS="skipped"); return 0
         if a.demo: deps = pipeline.demo_deps(seed=int(now.timestamp()) % 1000, now=now)
         else:
             import random; from .footage import PexelsClient; from .llm import GeminiClient
             from .reserve import UnavailableClient
             llm = GeminiClient(env["GEMINI_API_KEY"], settings["gemini"]["models"], temperature=settings["gemini"]["temperature"]) if env.get("GEMINI_API_KEY", "").strip() else UnavailableClient()
             v = settings["voice"]
+            from .cinematic_media import GeminiMedia
+            media = GeminiMedia(env["GEMINI_API_KEY"]) if env.get("GEMINI_API_KEY") else None
+            speech_model = env.get("GEMINI_TTS_MODEL", "").strip() if a.profile != "legacy" else ""
+            image_model = env.get("GEMINI_IMAGE_MODEL", "").strip() if a.profile != "legacy" and env.get("ALLOW_PAID_IMAGE_API") == "true" else ""
+            synth = tts.hindi_preview_synth if v["model"] == "hi-preview-espeak" else tts.piper_synth(v["model"], "voices", allow_noncommercial=v["allow_noncommercial"], length_scale=v["length_scale"])
+            if speech_model and media:
+                synth = media.speech(speech_model, "Hindi" if a.profile == "hindi_shorts" else "English")
             deps = pipeline.Deps(llm=llm,
                                  pexels=PexelsClient(env["PEXELS_API_KEY"]) if env.get("PEXELS_API_KEY") else None, yt=_yt(env),
-                                 synth_fn=tts.hindi_preview_synth if v["model"] == "hi-preview-espeak" else tts.piper_synth(v["model"], "voices", allow_noncommercial=v["allow_noncommercial"], length_scale=v["length_scale"]),
-                                 rng=random.Random(), now=now)
+                                 synth_fn=synth, rng=random.Random(), now=now, media=media, image_model=image_model,
+                                 image_budget=min(8, max(0, int(env.get("AI_IMAGE_MAX_CALLS", "0") or "0"))))
         item = pipeline.run_generate(settings, store, deps, a.workdir, demo=a.demo)
         if item is None: _out(ITEM_ID="", STATUS="skipped"); return 0
         _out(ITEM_ID=item["id"], STATUS=item["status"]); return 0 if item["status"] != "failed" else 1
