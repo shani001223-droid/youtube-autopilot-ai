@@ -1,0 +1,68 @@
+name: Generate video
+on:
+  schedule:
+    - cron: "17 3 * * *"          # daily 03:17 UTC (off the hour on purpose: top-of-hour runs are delayed most)
+  workflow_dispatch:
+    inputs:
+      demo:
+        description: "Smoke test: fake script, tone voice, generated visuals. Uses no API keys."
+        type: boolean
+        default: false
+permissions:
+  contents: write                 # commits state to data/ and creates the preview release
+concurrency:
+  group: autopilot-state
+  cancel-in-progress: false
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: System packages
+        run: sudo apt-get update -y && sudo apt-get install -y ffmpeg fonts-dejavu-core
+      - name: Python packages
+        env:
+          DEMO: ${{ inputs.demo }}
+        run: |
+          pip install -r requirements.txt
+          if [ "$DEMO" != "true" ]; then pip install -r requirements-voice.txt; fi
+      - name: Cache Piper voices
+        uses: actions/cache@v4
+        with:
+          path: voices
+          key: piper-voices-v1
+      - name: Generate
+        id: gen
+        env:
+          DEMO: ${{ inputs.demo }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+        run: |
+          ARGS=""
+          if [ "$DEMO" = "true" ]; then ARGS="--demo"; fi
+          python -m autopilot generate $ARGS
+      - name: Publish preview (GitHub Release, deleted after review)
+        if: steps.gen.outputs.STATUS == 'awaiting_approval'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ITEM_ID: ${{ steps.gen.outputs.ITEM_ID }}
+        run: |
+          TAG="preview-$ITEM_ID"
+          gh release create "$TAG" "out/$ITEM_ID/video.mp4" "out/$ITEM_ID/thumb.jpg" --title "Preview $ITEM_ID" --notes "Review copy for the dashboard. Deleted when you approve, reject or mark it posted." --prerelease
+          BASE="https://github.com/${{ github.repository }}/releases/download/$TAG"
+          python -m autopilot set-preview --id "$ITEM_ID" --url "$BASE/video.mp4" --thumb-url "$BASE/thumb.jpg"
+      - name: Save state
+        if: always()
+        run: |
+          git config user.name "autopilot-bot"
+          git config user.email "autopilot-bot@users.noreply.github.com"
+          git add data
+          git diff --cached --quiet || { git commit -m "state: generate run ${{ github.run_id }}"; git pull --rebase --autostash; git push; }

@@ -1,0 +1,65 @@
+name: Review action
+on:
+  workflow_dispatch:
+    inputs:
+      item_id:
+        description: "Queue item id"
+        required: true
+      action:
+        description: "What to do"
+        required: true
+        type: choice
+        options: [approve, reject, posted, approve_sample, enable_public, disable_public]
+      video_url:
+        description: "YouTube link (only for 'posted')"
+        required: false
+        default: ""
+permissions:
+  contents: write
+concurrency:
+  group: autopilot-state
+  cancel-in-progress: false
+jobs:
+  act:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Fetch preview files (approve only)
+        if: inputs.action == 'approve'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ITEM_ID: ${{ inputs.item_id }}
+        run: gh release download "preview-$ITEM_ID" -p video.mp4 -p thumb.jpg -D "out/$ITEM_ID"
+      - name: Run action
+        id: act
+        env:
+          ITEM_ID: ${{ inputs.item_id }}
+          ACTION: ${{ inputs.action }}
+          VIDEO_URL: ${{ inputs.video_url }}
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+        run: |
+          case "$ACTION" in
+            approve_sample|enable_public|disable_public) python -m autopilot settings-action --action "$ACTION" --id "$ITEM_ID" ;;
+            *) python -m autopilot publish --id "$ITEM_ID" --action "$ACTION" --video-url "$VIDEO_URL" ;;
+          esac
+      - name: Delete preview release when no longer needed
+        if: steps.act.outputs.STATUS == 'rejected' || steps.act.outputs.STATUS == 'published' || steps.act.outputs.STATUS == 'uploaded_private' || steps.act.outputs.STATUS == 'scheduled'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ITEM_ID: ${{ inputs.item_id }}
+        run: gh release delete "preview-$ITEM_ID" --cleanup-tag --yes || true
+      - name: Save state
+        if: always()
+        run: |
+          git config user.name "autopilot-bot"
+          git config user.email "autopilot-bot@users.noreply.github.com"
+          git add data
+          git diff --cached --quiet || { git commit -m "state: ${{ inputs.action }} ${{ inputs.item_id }}"; git pull --rebase --autostash; git push; }

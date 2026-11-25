@@ -1,0 +1,2 @@
+# Piper TTS (GPL-3.0 runtime; used as a tool inside the workflow, not redistributed). Voices are downloaded on first use.
+piper-tts

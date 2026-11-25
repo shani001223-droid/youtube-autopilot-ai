@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "automation": {
+    "enabled": true
+  },
+  "niche": {
+    "name": "Original English Horror & Mystery Stories",
+    "channel_name": "",
+    "language": "en",
+    "audience": "adults 18-45 who like short scary stories",
+    "tone": "slow-burn dread, concrete sensory detail, a quiet twist, no gore",
+    "subgenres": [
+      "supernatural",
+      "haunted places",
+      "folk horror",
+      "psychological",
+      "urban mystery",
+      "cosmic unease",
+      "found-document mystery",
+      "small-town secrets"
+    ],
+    "banned_topics": [],
+    "seed_queries": [
+      "scary story",
+      "horror story short",
+      "creepy mystery story"
+    ]
+  },
+  "content": {
+    "mode": "shorts",
+    "shorts_per_day": 1,
+    "short_target_seconds": 45,
+    "long_per_week": 0,
+    "long_days": [
+      "tue",
+      "sat"
+    ],
+    "long_target_minutes": 8
+  },
+  "voice": {
+    "model": "en_US-john-medium",
+    "allow_noncommercial": false,
+    "length_scale": 1.0
+  },
+  "visual": {
+    "avoid_people": true,
+    "grade": "horror"
+  },
+  "audio": {
+    "music_volume": 0.14
+  },
+  "schedule": {
+    "timezone": "UTC",
+    "publish_time": "18:00"
+  },
+  "approval": {
+    "required": true
+  },
+  "safety": {
+    "sample_approved": false,
+    "public_publishing_enabled": false,
+    "max_uploads_per_day": 1
+  },
+  "publish": {
+    "mode": "manual",
+    "category_id": "24",
+    "made_for_kids": false,
+    "disclose_synthetic": true
+  },
+  "gemini": {
+    "models": [
+      "gemini-flash-lite-latest",
+      "gemini-flash-latest"
+    ],
+    "temperature": 1.0
+  }
+}

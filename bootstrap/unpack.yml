@@ -1,0 +1,23 @@
+name: Unpack project
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  unpack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.BOOTSTRAP_TOKEN }}
+      - name: Unpack the ZIP you uploaded
+        run: |
+          set -e
+          Z=$(ls *.zip | head -n 1)
+          mkdir _unz && unzip -q "$Z" -d _unz
+          cp -a _unz/*/. .
+          rm -rf _unz "$Z"
+          git config user.name "autopilot-bot"
+          git config user.email "autopilot-bot@users.noreply.github.com"
+          git add -A
+          git commit -m "Install YouTube Autopilot AI"
+          git push

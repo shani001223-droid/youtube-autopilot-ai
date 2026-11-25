@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#141a22">
+<meta name="color-scheme" content="dark">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg">
+<title>Autopilot Control</title>
+<style>
+:root{--ink:#141a22;--panel:#1c2530;--panel2:#242f3d;--line:#2f3c4d;--bone:#e8e4d8;--fog:#9aa8b5;--lantern:#e0a63a;--on-lantern:#1a1204;--brick:#c4524a;--moss:#79a98a;
+--serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;--sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color-scheme:dark}
+*{box-sizing:border-box}html,body{margin:0;background:var(--ink);color:var(--bone);font:16px/1.45 var(--sans);-webkit-text-size-adjust:100%}
+body{min-height:100dvh;padding:calc(env(safe-area-inset-top,0px)) 0 calc(76px + env(safe-area-inset-bottom,0px))}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px 10px}
+h1{font:italic 600 24px/1.1 var(--serif);margin:0;letter-spacing:.2px}h1 small{display:block;font:500 11px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--fog);margin-top:4px;font-style:normal}
+h2{font:600 20px var(--serif);margin:22px 0 10px}h3{font:600 17px/1.25 var(--serif);margin:8px 0}
+main{padding:0 14px;max-width:720px;margin:0 auto}
+.pill{font-size:12px;padding:6px 11px;border-radius:99px;border:1px solid var(--line);color:var(--fog);white-space:nowrap}.pill.on{color:var(--moss);border-color:#3b5a48}.pill.off{color:var(--brick);border-color:#6a3430}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;margin:12px 0}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.muted{color:var(--fog);font-size:13px}.hook{font:italic 15px/1.4 var(--serif);color:#d8d2c2;margin:8px 0}
+.badge{font-size:12px;padding:4px 9px;border-radius:6px;background:var(--panel2);color:var(--fog)}
+.s-awaiting_approval{background:#4a3a14;color:var(--lantern)}.s-approved_manual,.s-uploaded_private,.s-scheduled,.s-published{background:#1f3a2c;color:var(--moss)}.s-failed,.s-rejected{background:#40201d;color:#e58b84}
+video{width:100%;max-height:62dvh;border-radius:10px;background:#000;margin:6px 0}
+button,.btn{font:600 15px var(--sans);min-height:46px;padding:0 16px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);color:var(--bone);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;gap:8px}
+button.primary{background:var(--lantern);color:var(--on-lantern);border-color:var(--lantern)}button.danger{color:#e58b84;border-color:#6a3430;background:transparent}button:disabled{opacity:.4}
+button:active{transform:translateY(1px)}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}.actions>*{flex:1 1 140px}
+label{display:block;font-size:13px;color:var(--fog);margin:12px 0 5px}input,textarea,select{width:100%;font:16px var(--sans);color:var(--bone);background:#10161d;border:1px solid var(--line);border-radius:10px;padding:11px}
+textarea{min-height:92px;resize:vertical}input:focus,textarea:focus,select:focus,button:focus-visible{outline:2px solid var(--lantern);outline-offset:1px}
+nav{position:fixed;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(6,1fr);background:#10161d;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);z-index:5}
+nav button{border:0;border-radius:0;background:none;min-height:60px;padding:0 2px;min-width:0;flex-direction:column;gap:2px;font:600 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--fog)}nav button .dot{width:22px;height:3px;border-radius:2px;background:transparent}
+nav button[aria-current=true]{color:var(--lantern)}nav button[aria-current=true] .dot{background:var(--lantern)}
+.switch{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0}.step{display:flex;gap:12px;margin:12px 0}.step b{flex:0 0 28px;height:28px;border-radius:50%;background:var(--panel2);display:grid;place-items:center;font-size:13px;color:var(--lantern)}
+.note{border-left:3px solid var(--lantern);padding:6px 12px;color:#d8d2c2;background:#1d2530;border-radius:0 8px 8px 0;margin:10px 0;font-size:14px}.note.warn{border-color:var(--brick)}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--fog);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+.log{font:13px/1.4 ui-monospace,Menlo,Consolas,monospace;padding:8px 0;border-bottom:1px solid var(--line);word-break:break-word}.log .lv{display:inline-block;min-width:58px;font-weight:700}.lv.error{color:#e58b84}.lv.warning{color:var(--lantern)}.lv.info{color:var(--moss)}
+.chips{display:flex;gap:8px;margin:8px 0}.chips button{min-height:38px;font-size:13px}.chips button[aria-pressed=true]{background:var(--lantern);color:var(--on-lantern)}
+#toast{position:fixed;left:50%;bottom:calc(86px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--bone);color:#141a22;padding:11px 16px;border-radius:10px;font-weight:600;max-width:90vw;display:none;z-index:9}
+details{margin:8px 0}summary{cursor:pointer;color:var(--fog);min-height:36px;display:flex;align-items:center;font-size:14px}pre{white-space:pre-wrap;word-break:break-word;background:#10161d;border-radius:8px;padding:10px;font-size:13px;margin:6px 0}
+.empty{text-align:center;color:var(--fog);padding:36px 12px}.empty b{display:block;font:italic 20px var(--serif);color:var(--bone);margin-bottom:6px}
+@media (prefers-reduced-motion:no-preference){.card{animation:rise .25s ease-out}@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}}
+</style>
+</head>
+<body>
+<header><h1 id="ttl">Autopilot Control<small>night shift desk</small></h1><span id="pill" class="pill">offline</span></header>
+<main id="view"></main>
+<nav id="tabs" hidden></nav>
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="lib.js"></script>
+<script>
+"use strict";
+const { esc, isSafeUrl, toB64, fromB64, deepMerge, statusLabel, validateSettings, weekPlan, ago } = Lib;
+const TABS = [["queue", "Queue"], ["make", "Make"], ["niche", "Niche"], ["plan", "Plan"], ["stats", "Stats"], ["logs", "Logs"]];
+const S = { repo: localStorage.getItem("ap_repo") || "", token: localStorage.getItem("ap_token") || "", tab: "queue", defaults: null, fileSettings: { data: {}, sha: null },
+            queue: [], logs: [], analytics: {}, insights: {}, audit: null, replies: null, runs: [], logFilter: "all" };
+const $ = s => document.querySelector(s);
+function toast(m) { const t = $("#toast"); t.textContent = m; t.style.display = "block"; clearTimeout(toast.h); toast.h = setTimeout(() => t.style.display = "none", 3600); }
+const eff = () => deepMerge(S.defaults || {}, S.fileSettings.data);
+
+async function gh(path, opt = {}) {
+  const r = await fetch("https://api.github.com/repos/" + S.repo + path, { ...opt, headers: { Accept: "application/vnd.github+json", Authorization: "Bearer " + S.token, "X-GitHub-Api-Version": "2022-11-28", ...(opt.headers || {}) } });
+  if (r.status === 401 || r.status === 403) throw new Error("GitHub refused the token (" + r.status + "). Check its repository access and permissions.");
+  return r;
+}
+async function readFile(path, fallback) {
+  const r = await gh("/contents/" + path + "?ref=main&t=" + Date.now());
+  if (r.status === 404) return { data: fallback, sha: null };
+  const j = await r.json(); return { data: JSON.parse(fromB64(j.content)), sha: j.sha };
+}
+async function writeFile(path, obj, sha, msg) {
+  const body = { message: msg, content: toB64(JSON.stringify(obj, null, 2)), branch: "main" }; if (sha) body.sha = sha;
+  const r = await gh("/contents/" + path, { method: "PUT", body: JSON.stringify(body) });
+  if (r.status === 409 || r.status === 422) throw new Error("The file changed while you were editing. Reload and try again.");
+  if (!r.ok) throw new Error("Could not save (" + r.status + ")");
+  const j = await r.json(); return j.content.sha;
+}
+async function dispatch(wf, inputs) {
+  const r = await gh("/actions/workflows/" + wf + "/dispatches", { method: "POST", body: JSON.stringify({ ref: "main", inputs }) });
+  if (r.status !== 204) throw new Error("Could not start the workflow (" + r.status + "). Is Actions enabled, and does the token have Actions: write?");
+  toast("Started. It takes a minute or two; tap Refresh to check."); setTimeout(load, 45000);
+}
+async function load() {
+  if (!S.repo || !S.token) return render();
+  try {
+    if (!S.defaults) S.defaults = await (await fetch("defaults.json")).json();
+    const [st, q, lg, an, ins, au, rp] = await Promise.all([readFile("data/settings.json", {}), readFile("data/queue.json", []), readFile("data/logs.json", []), readFile("data/analytics.json", {}),
+      readFile("data/insights.json", {}), readFile("data/audit.json", null), readFile("data/replies.json", null)]);
+    S.fileSettings = st; S.queue = q.data; S.logs = lg.data; S.analytics = an.data; S.insights = ins.data; S.audit = au.data; S.replies = rp.data;
+    const rr = await gh("/actions/runs?per_page=6"); S.runs = rr.ok ? (await rr.json()).workflow_runs : [];
+  } catch (e) { toast(e.message); }
+  render();
+}
+function copy(text) { (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(() => toast("Copied"), () => { const a = document.createElement("textarea"); a.value = text; document.body.appendChild(a); a.select(); document.execCommand("copy"); a.remove(); toast("Copied"); }); }
+async function saveSettings(patch) {
+  const errs = validateSettings(deepMerge(eff(), patch)); if (errs.length) { toast(errs[0]); return false; }
+  try { const next = deepMerge(S.fileSettings.data, patch); const sha = await writeFile("data/settings.json", next, S.fileSettings.sha, "settings: update from dashboard"); S.fileSettings = { data: next, sha }; toast("Saved"); render(); return true; }
+  catch (e) { toast(e.message); return false; }
+}
+
+/* ---------- views ---------- */
+function connect() {
+  $("#view").innerHTML = `<div class="card"><h2 style="margin-top:0">Connect your repo</h2><p class="muted">Both values stay on this phone (browser storage). Create a fine-grained token limited to this one repository with <b>Actions: read and write</b> and <b>Contents: read and write</b>. Never paste it anywhere else.</p>
+  <label for="repo">Repository (owner/name)</label><input id="repo" placeholder="yourname/youtube-autopilot-ai" autocapitalize="none" autocomplete="off" value="${esc(S.repo)}">
+  <label for="tok">Fine-grained token</label><input id="tok" type="password" autocomplete="off" placeholder="github_pat_…"><div class="actions"><button class="primary" id="go">Connect</button></div></div>`;
+  $("#go").onclick = async () => { S.repo = $("#repo").value.trim(); S.token = $("#tok").value.trim();
+    if (!/^[\w.-]+\/[\w.-]+$/.test(S.repo) || !S.token) return toast("Enter owner/name and the token");
+    try { const r = await gh(""); if (!r.ok) throw new Error("Repository not found or token has no access"); localStorage.setItem("ap_repo", S.repo); localStorage.setItem("ap_token", S.token); toast("Connected"); load(); } catch (e) { toast(e.message); } };
+}
+function card(it) {
+  const set = eff(), vid = isSafeUrl(it.preview_url) ? it.preview_url : null, poster = isSafeUrl(it.thumb_url) ? it.thumb_url : "";
+  const act = (action, extra = {}) => dispatch("publish.yml", { item_id: it.id, action, video_url: "", ...extra }).catch(e => toast(e.message));
+  const el = document.createElement("article"); el.className = "card";
+  let h = `<div class="row"><span class="badge s-${esc(it.status)}">${esc(statusLabel(it.status))}</span><span class="muted">${esc(ago(it.created_at))}${it.demo ? " · demo" : ""}</span></div><h3>${esc(it.title || it.topic || "Untitled")}</h3>`;
+  if (vid && ["awaiting_approval", "approved_manual"].includes(it.status)) h += `<video controls playsinline preload="metadata" src="${esc(vid)}" poster="${esc(poster)}"></video>`;
+  if (it.hook) h += `<p class="hook">“${esc(it.hook)}” <span class="muted">· hook ${esc(it.hook_score)}/100</span></p>`;
+  if (it.status === "failed") h += `<div class="note warn"><b>Stopped at ${esc(it.failed_stage || "?")}.</b> ${esc(it.error || "")}</div>`;
+  if (it.error && it.status !== "failed") h += `<div class="note warn">${esc(it.error)}</div>`;
+  if (it.description) h += `<details><summary>Description, tags, script</summary><pre>${esc(it.description)}</pre><pre>${esc((it.tags || []).join(", "))}</pre><pre>${esc((it.script?.scenes || []).map(s => s.narration).join("\n"))}</pre></details>`;
+  if (it.qa && !it.qa.ok) h += `<div class="note warn">Quality check flagged a long pause in the narration. Listen before approving.</div>`;
+  if (it.status === "awaiting_approval") h += `<div class="actions"><button class="primary" data-a="approve">Approve</button><button class="danger" data-a="reject">Reject</button></div>`;
+  if (it.status === "approved_manual") h += `<div class="step"><b>1</b><div>Download the video${vid ? `: <a class="btn" style="margin-top:6px" href="${esc(vid)}" download>Download MP4</a>` : ""}</div></div>
+    <div class="step"><b>2</b><div>Copy the text<div class="actions"><button data-c="title">Title</button><button data-c="description">Description</button><button data-c="tags">Tags</button></div></div></div>
+    <div class="step"><b>3</b><div>In the YouTube app: Create → Upload → choose the file, paste the text, set <b>Altered content: yes</b> (AI voice), schedule if you like.</div></div>
+    <div class="step"><b>4</b><div>Then tell me where it lives so I can track it.<div class="actions"><button class="primary" data-a="posted">I posted it</button></div></div></div>`;
+  if (["uploaded_private", "scheduled", "published"].includes(it.status) && it.url) h += `<div class="actions"><a class="btn" href="${esc(it.url)}" target="_blank" rel="noopener">Open on YouTube</a></div>`;
+  if (["uploaded_private", "approved_manual", "published"].includes(it.status) && !set.safety.sample_approved) h += `<div class="note">Happy with this as your <b>sample</b>? Marking it unlocks the (still separate) public-publishing switch in Make.</div><div class="actions"><button data-a="approve_sample">This sample is good</button></div>`;
+  el.innerHTML = h;
+  el.querySelectorAll("[data-a]").forEach(b => b.onclick = async () => { const a = b.dataset.a;
+    if (a === "reject" && !confirm("Reject and delete this preview?")) return;
+    if (a === "posted") { const u = prompt("Paste the YouTube link of the video you posted"); if (!u) return; return act("posted", { video_url: u }); }
+    act(a); });
+  el.querySelectorAll("[data-c]").forEach(b => b.onclick = () => copy(b.dataset.c === "tags" ? (it.tags || []).join(", ") : it[b.dataset.c] || ""));
+  return el;
+}
+function vQueue() {
+  const v = $("#view"); v.innerHTML = `<div class="actions"><button id="rq">Refresh</button></div>`; $("#rq").onclick = load; const items = [...S.queue].sort((x, y) => String(y.created_at || "").localeCompare(String(x.created_at || "")));
+  if (!items.length) v.innerHTML = `<div class="empty"><b>Nothing in the queue.</b>Open Make and run the demo to test the whole pipeline with no keys.</div>`;
+  items.forEach(it => v.appendChild(card(it)));
+}
+function vMake() {
+  const s = eff(), safe = s.safety, v = $("#view");
+  const runs = S.runs.map(r => `<div class="log"><span class="lv ${r.conclusion === "success" ? "info" : r.conclusion === "failure" ? "error" : "warning"}">${esc(r.conclusion || r.status)}</span> ${esc(r.name)} · ${esc(ago(r.created_at))} · <a href="${esc(r.html_url)}" target="_blank" rel="noopener" style="color:var(--lantern)">open</a></div>`).join("") || `<p class="muted">No runs yet.</p>`;
+  v.innerHTML = `<div class="card"><div class="switch"><div><b>Automation</b><div class="muted">Daily generation at 03:17 UTC</div></div><button id="auto" class="${s.automation.enabled ? "primary" : ""}">${s.automation.enabled ? "On" : "Off"}</button></div>
+   <div class="actions"><button class="primary" id="run">Make a video now</button><button id="demo">Run demo (no keys)</button></div></div>
+   <h2>Publishing safety</h2><div class="card">
+   <div class="note ${safe.sample_approved ? "" : "warn"}">${safe.sample_approved ? "Sample approved." : "<b>Public publishing is locked.</b> Approve a sample video first."} Public scheduling also needs <i>mode = api</i> (YouTube audit passed). Until then nothing leaves this repo except by your hand.</div>
+   <label for="mode">Publish mode</label><select id="mode"><option value="manual">manual (I upload by hand)</option><option value="api">api (pipeline uploads)</option></select>
+   <div class="switch"><div><b>Public publishing</b><div class="muted">${safe.public_publishing_enabled ? "ON: approved videos are scheduled public" : "OFF"}</div></div><button id="pub" ${(!safe.sample_approved || s.publish.mode !== "api") && !safe.public_publishing_enabled ? "disabled" : ""} class="${safe.public_publishing_enabled ? "danger" : ""}">${safe.public_publishing_enabled ? "Turn off" : "Turn on"}</button></div></div>
+   <h2>Recent runs</h2><div class="card">${runs}</div><div class="actions"><button id="reload">Refresh</button><button id="disc" class="danger">Disconnect</button></div>`;
+  $("#mode").value = s.publish.mode;
+  $("#auto").onclick = () => saveSettings({ automation: { enabled: !s.automation.enabled } });
+  $("#mode").onchange = e => saveSettings({ publish: { mode: e.target.value } });
+  $("#run").onclick = () => dispatch("generate.yml", { demo: "false" }).catch(e => toast(e.message));
+  $("#demo").onclick = () => dispatch("generate.yml", { demo: "true" }).catch(e => toast(e.message));
+  $("#pub").onclick = () => { if (!safe.public_publishing_enabled && !confirm("Allow approved videos to go public on schedule?")) return; dispatch("publish.yml", { item_id: "-", action: safe.public_publishing_enabled ? "disable_public" : "enable_public", video_url: "" }).catch(e => toast(e.message)); };
+  $("#reload").onclick = load; $("#disc").onclick = () => { localStorage.removeItem("ap_token"); S.token = ""; render(); };
+}
+function vNiche() {
+  const n = eff().niche, c = eff().content, vo = eff().voice;
+  $("#view").innerHTML = `<div class="card"><label for="nn">Niche</label><input id="nn" value="${esc(n.name)}"><label for="nt">Tone</label><textarea id="nt">${esc(n.tone)}</textarea>
+   <label for="na">Audience</label><input id="na" value="${esc(n.audience)}"><label for="ns">Subgenres (one per line)</label><textarea id="ns">${esc(n.subgenres.join("\n"))}</textarea>
+   <label for="nb">Never write about (one per line)</label><textarea id="nb">${esc(n.banned_topics.join("\n"))}</textarea><label for="nq">Research search phrases (one per line)</label><textarea id="nq">${esc(n.seed_queries.join("\n"))}</textarea>
+   <label for="len">Short length: <span id="lv">${esc(c.short_target_seconds)}</span> s</label><input id="len" type="range" min="20" max="55" value="${esc(c.short_target_seconds)}">
+   <label for="vm">Piper voice</label><input id="vm" value="${esc(vo.model)}" autocapitalize="none"><div class="note">Several popular voices are non-commercial and are refused automatically. Default <i>en_US-john-medium</i> is listed as public domain by a third party. Check its model card before monetising.</div>
+   <div class="actions"><button class="primary" id="save">Save niche</button></div></div>`;
+  const lines = id => $(id).value.split("\n").map(x => x.trim()).filter(Boolean);
+  $("#len").oninput = e => $("#lv").textContent = e.target.value;
+  $("#save").onclick = () => saveSettings({ niche: { name: $("#nn").value.trim(), tone: $("#nt").value.trim(), audience: $("#na").value.trim(), subgenres: lines("#ns"), banned_topics: lines("#nb"), seed_queries: lines("#nq") },
+    content: { short_target_seconds: +$("#len").value }, voice: { model: $("#vm").value.trim() } });
+}
+function vPlan() {
+  const s = eff(), rows = weekPlan(s, new Date());
+  $("#view").innerHTML = `<div class="card"><label for="pt">Publish time</label><input id="pt" type="time" value="${esc(s.schedule.publish_time)}"><label for="tz">Timezone (IANA name, e.g. Asia/Karachi)</label><input id="tz" value="${esc(s.schedule.timezone)}" autocapitalize="none">
+   <label for="spd">Shorts per day</label><select id="spd">${[0, 1, 2, 3].map(n => `<option ${n === s.content.shorts_per_day ? "selected" : ""}>${n}</option>`).join("")}</select>
+   <label for="lpw">Long videos per week</label><select id="lpw" disabled><option>0</option></select><div class="note">Long-form is planned for V1.1. The pipeline refuses long mode until it is built and tested.</div>
+   <div class="note">One Short a day is your target. YouTube rewards consistency over volume, so if quality slips, drop to 3-4 a week here.</div>
+   <div class="actions"><button class="primary" id="save">Save schedule</button></div></div><h2>This week</h2><div class="card">${rows.map(r => `<div class="log">${esc(r.weekday.toUpperCase())} ${esc(r.date.slice(5))} · ${esc(r.time)} · ${esc(r.format)}</div>`).join("") || `<p class="muted">Nothing planned.</p>`}</div>`;
+  $("#save").onclick = () => saveSettings({ schedule: { publish_time: $("#pt").value, timezone: $("#tz").value.trim() }, content: { shorts_per_day: +$("#spd").value } });
+}
+function vStats() {
+  const recs = S.analytics.records || [], top = (S.insights.subgenre || [])[0], v = $("#view");
+  v.innerHTML = `<div class="actions"><button id="ref">Refresh analytics</button></div>` +
+    (S.audit ? `<div class="note"><b>One thing to fix:</b> ${esc(S.audit.fix)}</div>` : "") + (top ? `<div class="note">Best-retaining subgenre so far: <b>${esc(top.value)}</b> (${esc(top.mean_view_pct)}% viewed, ${esc(top.n)} videos). The next videos lean toward it, with room to explore.</div>` : "") +
+    (recs.length ? `<div class="card"><table><tr><th>Video</th><th>Views</th><th>Viewed</th></tr>${recs.map(r => `<tr><td>${esc(r.title)}</td><td>${esc(r.views)}</td><td>${r.avg_view_pct == null ? "–" : esc(Math.round(r.avg_view_pct)) + "%"}</td></tr>`).join("")}</table></div>` :
+      `<div class="empty"><b>No numbers yet.</b>Analytics need the YouTube secrets, and videos must be marked as posted.</div>`) +
+    (S.replies?.drafts?.length ? `<h2>Reply drafts</h2><p class="muted">Nothing is posted for you. Copy what you like.</p>${S.replies.drafts.map(d => `<div class="card"><p>${esc(d.reply)}</p><div class="actions"><button data-r="${esc(d.reply)}">Copy</button></div></div>`).join("")}` : "");
+  $("#ref").onclick = () => dispatch("analytics.yml", {}).catch(e => toast(e.message)); v.querySelectorAll("[data-r]").forEach(b => b.onclick = () => copy(b.dataset.r));
+}
+function vLogs() {
+  const f = S.logFilter, rows = S.logs.filter(l => f === "all" || l.level === f).slice(-120).reverse();
+  $("#view").innerHTML = `<div class="chips">${["all", "error", "warning"].map(x => `<button aria-pressed="${f === x}" data-f="${x}">${x}</button>`).join("")}</div>` +
+    (rows.map(l => `<div class="log"><span class="lv ${esc(l.level)}">${esc(l.level)}</span> <b>${esc(l.stage)}</b> ${esc(l.message)} <span class="muted">${esc(ago(l.t))}</span></div>`).join("") || `<div class="empty"><b>Quiet.</b>Nothing logged at this level.</div>`);
+  document.querySelectorAll("[data-f]").forEach(b => b.onclick = () => { S.logFilter = b.dataset.f; vLogs(); });
+}
+const VIEWS = { queue: vQueue, make: vMake, niche: vNiche, plan: vPlan, stats: vStats, logs: vLogs };
+function render() {
+  const on = S.repo && S.token; $("#tabs").hidden = !on; const p = $("#pill");
+  if (!on) { p.textContent = "offline"; p.className = "pill"; return connect(); }
+  const a = eff().automation?.enabled; p.textContent = a ? "automation on" : "automation off"; p.className = "pill " + (a ? "on" : "off");
+  $("#tabs").innerHTML = TABS.map(([k, l]) => `<button data-t="${k}" aria-current="${S.tab === k}"><span class="dot"></span>${l}</button>`).join("");
+  $("#tabs").querySelectorAll("[data-t]").forEach(b => b.onclick = () => { S.tab = b.dataset.t; render(); window.scrollTo(0, 0); }); VIEWS[S.tab]();
+}
+render(); load();
+</script>
+</body>
+</html>
