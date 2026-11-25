@@ -29,14 +29,25 @@ class VoiceTests(unittest.TestCase):
             self.assertAlmostEqual(r["timeline"][1]["start"], 3 * 0.35 + 0.3, delta=0.05)
 
     def test_piper_wrapper_builds_command_and_checks_voice(self):
+        from pathlib import Path
         calls = []
-        class R: returncode = 0; stderr = ""
-        def runner(cmd, **kw): calls.append((cmd, kw)); return R()
-        synth = tts.piper_synth("en_US-john-medium", data_dir="voices", runner=runner)
-        synth("Hello there.", "/tmp/x.wav")
-        cmd, kw = calls[0]
-        self.assertIn("en_US-john-medium", cmd); self.assertIn("/tmp/x.wav", cmd); self.assertEqual(kw["input"], "Hello there.")
-        with self.assertRaises(tts.VoiceLicenseError): tts.piper_synth("en_US-ryan-high", runner=runner)
+        class R: returncode = 0; stderr = ""; stdout = ""
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            (root / "en_US-john-medium.onnx").write_bytes(b"model")
+            (root / "en_US-john-medium.onnx.json").write_text("{}")
+            target = root / "x.wav"
+            def runner(cmd, **kw):
+                calls.append((cmd, kw))
+                sine_synth(kw["input"], target)
+                return R()
+            synth = tts.piper_synth("en_US-john-medium", data_dir=root, runner=runner)
+            synth("Hello there.", target)
+            cmd, kw = calls[0]
+            self.assertIn(str(root / "en_US-john-medium.onnx"), cmd)
+            self.assertIn(str(target), cmd)
+            self.assertEqual(kw["input"], "Hello there.")
+            with self.assertRaises(tts.VoiceLicenseError): tts.piper_synth("en_US-ryan-high", runner=runner)
 
 
 def vid(slug, files, vid_id=1):
