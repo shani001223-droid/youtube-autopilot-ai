@@ -11,7 +11,7 @@ class ResearchError(Exception):
     pass
 
 
-def _tokens(t): return {w for w in re.findall(r"[a-z0-9']+", t.lower()) if w not in STOP}
+def _tokens(t): return {w for w in re.findall(r"[a-z0-9\u0900-\u097f']+", t.lower()) if w not in STOP}
 
 
 def novelty(a, b):
@@ -51,15 +51,18 @@ Channel niche: {n['name']}. Audience: {n['audience']}. Today's chosen subgenre: 
 Recent titles from similar videos (study the PATTERNS - themes, settings, emotional hooks - never copy a title or plot):
 {tr}
 What has retained best on this channel: {best}.
-Already used on this channel (do not repeat or paraphrase): {json.dumps(recent_topics[-30:])}
+Already used on this channel (do not repeat or paraphrase; avoid reusing the central supernatural mechanism, setting and resolution even under a different title): {json.dumps(recent_topics[-30:])}
 Propose 5 ORIGINAL story topics. Each must be an invented fiction premise, not a real event, person, brand or tragedy.
 Return ONLY JSON: {{"candidates": [{{"topic": "short working title", "premise": "2 sentences", "angle": "what makes it fresh", "why_now": "why this fits the audience today"}}]}}"""
 
 
 def pick_topic(llm, settings, recent_topics, trends, insights, variety, rng):
-    out = llm.generate_json(build_research_prompt(settings, trends, insights, recent_topics, variety))
-    cands = out.get("candidates", []) if isinstance(out, dict) else out
-    cands = [c for c in cands if isinstance(c, dict) and c.get("topic")]
-    fresh = filter_novel(cands, recent_topics)
-    if not fresh: raise ResearchError("every proposed topic repeats a recent one")
-    return rng.choice(fresh)
+    prompt = build_research_prompt(settings, trends, insights, recent_topics, variety)
+    for attempt in range(3):
+        out = llm.generate_json(prompt)
+        cands = out.get("candidates", []) if isinstance(out, dict) else out
+        cands = [c for c in (cands or []) if isinstance(c, dict) and c.get("topic")]
+        fresh = filter_novel(cands, recent_topics)
+        if fresh: return rng.choice(fresh)
+        prompt += "\nThe previous candidates were too similar to earlier topics. Invent completely different settings and mechanisms."
+    raise ResearchError("every proposed topic repeats a recent one after three attempts")
