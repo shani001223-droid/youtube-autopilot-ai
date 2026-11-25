@@ -45,3 +45,18 @@ class ProductionTests(unittest.TestCase):
             self.assertIsNone(m.refs[0])
             self.assertIsNotNone(m.refs[1])
             self.assertIsNone(rows[2]["path"])
+
+    def test_original_channel_reserve(self):
+        import random
+        from autopilot import config, profiles, reserve, scriptgen
+        for name, count in [("hindi_shorts",3),("english_long",1)]:
+            settings=profiles.select_profile(config.load_settings("/nonexistent"),name)
+            recent=[]
+            for _ in range(count):
+                topic, script=reserve.reserve_story(settings,recent,random.Random(3))
+                self.assertEqual(scriptgen.validate_script(script,settings),[])
+                self.assertNotIn(topic["topic"],recent)
+                recent.append(topic["topic"])
+            from autopilot.llm import GeminiUnavailable
+            with self.assertRaises(GeminiUnavailable):
+                reserve.reserve_story(settings,recent,random.Random(3))
