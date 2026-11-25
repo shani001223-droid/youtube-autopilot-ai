@@ -43,6 +43,9 @@ STORIES = [
 ]
 
 def reserve_story(settings, recent, rng):
+    if settings.get("profile") in ("hindi_shorts", "english_long"):
+        from .reserve_profiles import reserve_profile
+        return reserve_profile(settings, recent, rng)
     niche = settings["niche"]
     if niche.get("language") != "en" or settings["content"]["mode"] != "shorts" or "horror" not in niche.get("name", "").lower():
         raise GeminiUnavailable("original reserve is only configured for English horror shorts")
