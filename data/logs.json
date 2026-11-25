@@ -1,1 +1,9 @@
-[]
+[
+ {
+  "t": "2026-11-25T11:30:19Z",
+  "level": "error",
+  "stage": "start",
+  "message": "missing secrets: ['GEMINI_API_KEY']",
+  "run": null
+ }
+]
