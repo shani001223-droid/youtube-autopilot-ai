@@ -1,5 +1,6 @@
 """Pexels footage. Scenery only: the Pexels licence forbids showing identifiable people in a bad light, and horror does."""
 import re
+import time
 from pathlib import Path
 import requests
 
@@ -31,13 +32,21 @@ def attribution(video):
 
 
 class PexelsClient:
-    def __init__(self, api_key, session=None, timeout=30):
-        self.key, self.sess, self.timeout = api_key, session or requests.Session(), timeout
+    def __init__(self, api_key, session=None, timeout=30, sleep=time.sleep):
+        self.key, self.sess, self.timeout = api_key.strip(), session or requests.Session(), timeout
+        self.sleep = sleep
 
     def search_videos(self, query, orientation="portrait", per_page=15):
-        r = self.sess.get(API, headers={"Authorization": self.key}, params={"query": query, "orientation": orientation, "per_page": per_page, "size": "medium"}, timeout=self.timeout)
-        r.raise_for_status()
-        return r.json().get("videos", [])
+        for attempt in range(2):
+            try:
+                r = self.sess.get(API, headers={"Authorization": self.key}, params={"query": query, "orientation": orientation, "per_page": per_page, "size": "medium"}, timeout=self.timeout)
+            except (requests.Timeout, requests.ConnectionError):
+                if attempt: raise
+                self.sleep(2); continue
+            if r.status_code in (408, 500, 502, 503, 504) and attempt == 0:
+                self.sleep(2); continue
+            r.raise_for_status()
+            return r.json().get("videos", [])
 
     def download(self, url, dest):
         r = self.sess.get(url, stream=True, timeout=self.timeout); r.raise_for_status()
@@ -57,7 +66,8 @@ def select_clips(pexels, queries, durations, workdir, used_ids=None, log=lambda 
                     if not vids and isinstance(pexels, PexelsClient):
                         vids = pexels.search_videos(query, orientation="landscape")
                 except Exception as ex:
-                    status = getattr(getattr(ex, "response", None), "status_code", None)
+                    response = getattr(ex, "response", None)
+                    status = getattr(response, "status_code", None)
                     log("warning", f"Pexels unavailable ({type(ex).__name__}, HTTP {status or 'unknown'}); trying alternate sources"); down = True; break
                 for v in vids:
                     f = pick_file(v)

@@ -7,6 +7,8 @@ from typing import Any, Callable
 
 from . import config, demo, footage, music, qa, render, research, safety, scriptgen, seo, subtitles, thumbnail, tts, youtube
 from .state import redact
+from .llm import GeminiUnavailable
+from .reserve import reserve_story
 
 
 class GateError(Exception):
@@ -46,10 +48,20 @@ def run_generate(settings, store, deps, workdir, run_id=None, demo=False):
         if deps.yt:
             try: trends = research.trend_titles(deps.yt, settings, deps.now)
             except Exception as ex: log("warning", "research", f"trend lookup failed, continuing without: {redact(str(ex))}")
-        topic = research.pick_topic(deps.llm, settings, recent, trends, insights, variety, deps.rng)
-        log("info", "research", f"topic '{topic['topic']}' | {variety['subgenre']} | {variety['structure']} | {len(trends)} trend titles")
-
-        stage = "script"; script = scriptgen.generate_script(deps.llm, settings, topic, variety); hook = scriptgen.choose_hook(script["hooks"])
+        source = "demo" if demo else "gemini"
+        try:
+            topic = research.pick_topic(deps.llm, settings, recent, trends, insights, variety, deps.rng)
+            log("info", "research", f"topic '{topic['topic']}' | {variety['subgenre']} | {variety['structure']} | {len(trends)} trend titles")
+            stage = "script"
+            script = scriptgen.generate_script(deps.llm, settings, topic, variety)
+        except GeminiUnavailable as ex:
+            if demo: raise
+            log("warning", stage, f"Gemini unavailable: {redact(str(ex))}; trying original story reserve")
+            stage = "script"
+            topic, script = reserve_story(settings, recent, deps.rng)
+            source = "original_reserve"
+            log("info", "script", f"Using original reserve: {topic['topic']}")
+        hook = scriptgen.choose_hook(script["hooks"])
         log("info", "script", f"{len(script['scenes'])} scenes; hook score {hook['score']} ({hook['band']}, {hook['formula']})")
 
         stage = "voice"; out = Path(workdir) / iid; out.mkdir(parents=True, exist_ok=True)
@@ -75,6 +87,8 @@ def run_generate(settings, store, deps, workdir, run_id=None, demo=False):
         info = render.render_video([{"path": c["path"], "duration": d, "query": q} for c, d, q in zip(clips, durations, queries)], vo["wav"], mus, ass, video, out / "work",
                                    runner=deps.runner, music_volume=settings["audio"]["music_volume"])
         log("info", "render", f"{info['width']}x{info['height']} {info['duration']:.1f}s audio={info['has_audio']}")
+        if not info.get("has_video") or not info.get("has_audio") or (info.get("width"), info.get("height")) != (1080, 1920) or not 20 <= info.get("duration", 0) <= 60:
+            raise GateError("Rendered video failed vertical video/audio/duration quality gate")
 
         stage = "thumbnail"; choice = seo.choose_title(script["title_ideas"], script["thumbnail_text"]); thumb = out / "thumb.jpg"; frame = out / "frame.jpg"
         thumbnail.extract_frame(out / "work" / "joined.mp4", min(1.0, info["duration"] / 2), frame, runner=deps.runner)   # caption-free source
@@ -91,7 +105,7 @@ def run_generate(settings, store, deps, workdir, run_id=None, demo=False):
                             thumb_text=choice["thumb_text"], title_issues=choice["issues"], description=desc, tags=tags, hook=hook["hook"], hook_score=hook["score"],
                             hook_formula=hook["formula"], script={"scenes": script["scenes"], "closing_line": script["closing_line"], "loop_line": script["loop_line"]},
                             credits=credits, video_info=info, visual_sources=[c.get("kind", "stock_video" if c.get("path") else "illustration") for c in clips], qa={"ok": qa_ok, "gap_seconds": dead["gap_seconds"]}, files={"video": str(video), "thumb": str(thumb)},
-                            preview_url=None, error=None)
+                            preview_url=None, error=None, script_source=source)
     except Exception as ex:
         msg = redact(f"{type(ex).__name__}: {ex}"); log("error", stage, msg)
         return store.update(iid, status="failed", failed_stage=stage, error=msg)
@@ -100,12 +114,16 @@ def run_generate(settings, store, deps, workdir, run_id=None, demo=False):
 def run_publish(settings, store, item_id, action, yt=None, workdir="out", video_url=None, now=None):
     now = now or datetime.now(timezone.utc); item = store.get(item_id); log = lambda l, m: store.log(l, "publish", m, item_id)
     if action == "reject":
-        log("info", "rejected"); return store.update(item_id, status="rejected")
+        log("info", "rejected"); return store.update(item_id, status="rejected", preview_url=None, thumb_url=None)
     if action == "posted":
         vid = youtube.video_id_from_url(video_url or "")
         if not vid: raise ValueError("that does not look like a YouTube video link")
         log("info", f"marked as posted: {vid}"); return store.update(item_id, status="published", video_id=vid, url=f"https://youtu.be/{vid}", published_at=_iso(now))
     if action != "approve": raise ValueError(f"unknown action '{action}'")
+    if item.get("status") != "awaiting_approval":
+        if item.get("status") in ("approved_manual", "uploaded_private", "scheduled", "published"):
+            return item
+        raise GateError("only a generated video awaiting review can be approved")
     taken = [i["publish_at"] for i in store.items() if i.get("publish_at")]; plan = safety.publish_plan(settings, now, taken)
     if plan["mode"] == "manual":
         log("info", plan["reason"]); return store.update(item_id, status="approved_manual", plan=plan, error=None)

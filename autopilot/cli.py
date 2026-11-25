@@ -48,11 +48,11 @@ def main(argv=None, env=None):
     if a.cmd == "generate":
         if a.demo: deps = pipeline.demo_deps(seed=int(now.timestamp()) % 1000, now=now)
         else:
-            missing = [k for k in ("GEMINI_API_KEY",) if not env.get(k)]
-            if missing: print("missing secrets:", ", ".join(missing), file=sys.stderr); store.log("error", "start", f"missing secrets: {missing}"); return 2
             import random; from .footage import PexelsClient; from .llm import GeminiClient
+            from .reserve import UnavailableClient
+            llm = GeminiClient(env["GEMINI_API_KEY"], settings["gemini"]["models"], temperature=settings["gemini"]["temperature"]) if env.get("GEMINI_API_KEY", "").strip() else UnavailableClient()
             v = settings["voice"]
-            deps = pipeline.Deps(llm=GeminiClient(env["GEMINI_API_KEY"], settings["gemini"]["models"], temperature=settings["gemini"]["temperature"]),
+            deps = pipeline.Deps(llm=llm,
                                  pexels=PexelsClient(env["PEXELS_API_KEY"]) if env.get("PEXELS_API_KEY") else None, yt=_yt(env),
                                  synth_fn=tts.piper_synth(v["model"], "voices", allow_noncommercial=v["allow_noncommercial"], length_scale=v["length_scale"]),
                                  rng=random.Random(), now=now)

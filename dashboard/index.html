@@ -112,7 +112,7 @@ function card(it) {
   const act = (action, extra = {}) => dispatch("publish.yml", { item_id: it.id, action, video_url: "", ...extra }).catch(e => toast(e.message));
   const el = document.createElement("article"); el.className = "card";
   let h = `<div class="row"><span class="badge s-${esc(it.status)}">${esc(statusLabel(it.status))}</span><span class="muted">${esc(ago(it.created_at))}${it.demo ? " · demo" : ""}</span></div><h3>${esc(it.title || it.topic || "Untitled")}</h3>`;
-  if (vid && ["awaiting_approval", "approved_manual"].includes(it.status)) h += `<video controls playsinline preload="metadata" src="${esc(vid)}" poster="${esc(poster)}"></video>`;
+  if (vid && ["awaiting_approval", "approved_manual"].includes(it.status)) h += `<video controls playsinline preload="metadata" src="${esc(vid)}" poster="${esc(poster)}" onerror="this.nextElementSibling.hidden=false"></video><p hidden>Preview could not load. Refresh or open the MP4 below; do not approve an unreviewed video.</p><p><a href="${esc(vid)}" target="_blank" rel="noopener">Open / download MP4</a></p>`;
   if (it.hook) h += `<p class="hook">“${esc(it.hook)}” <span class="muted">· hook ${esc(it.hook_score)}/100</span></p>`;
   if (it.status === "failed") h += `<div class="note warn"><b>Stopped at ${esc(it.failed_stage || "?")}.</b> ${esc(it.error || "")}</div>`;
   if (it.error && it.status !== "failed") h += `<div class="note warn">${esc(it.error)}</div>`;

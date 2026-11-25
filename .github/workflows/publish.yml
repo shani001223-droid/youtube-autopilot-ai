@@ -25,6 +25,8 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main # get current state after acquiring the concurrency lock
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -50,12 +52,6 @@ jobs:
             approve_sample|enable_public|disable_public) python -m autopilot settings-action --action "$ACTION" --id "$ITEM_ID" ;;
             *) python -m autopilot publish --id "$ITEM_ID" --action "$ACTION" --video-url "$VIDEO_URL" ;;
           esac
-      - name: Delete preview release when no longer needed
-        if: steps.act.outputs.STATUS == 'rejected' || steps.act.outputs.STATUS == 'published' || steps.act.outputs.STATUS == 'uploaded_private' || steps.act.outputs.STATUS == 'scheduled'
-        env:
-          GH_TOKEN: ${{ github.token }}
-          ITEM_ID: ${{ inputs.item_id }}
-        run: gh release delete "preview-$ITEM_ID" --cleanup-tag --yes || true
       - name: Save state
         if: always()
         run: |
@@ -63,3 +59,10 @@ jobs:
           git config user.email "autopilot-bot@users.noreply.github.com"
           git add data
           git diff --cached --quiet || { git commit -m "state: ${{ inputs.action }} ${{ inputs.item_id }}"; git pull --rebase --autostash; git push; }
+
+      - name: Delete preview release when no longer needed
+        if: success() && (steps.act.outputs.STATUS == 'rejected' || steps.act.outputs.STATUS == 'published' || steps.act.outputs.STATUS == 'uploaded_private' || steps.act.outputs.STATUS == 'scheduled')
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ITEM_ID: ${{ inputs.item_id }}
+        run: gh release delete "preview-$ITEM_ID" --cleanup-tag --yes || true
