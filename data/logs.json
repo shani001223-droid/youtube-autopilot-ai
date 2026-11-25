@@ -621,5 +621,19 @@
   "stage": "seo",
   "message": "6 tags; description 1541 chars; uncovered queries: ['psychological story']",
   "run": "20261125154050"
+ },
+ {
+  "t": "2026-11-25T16:32:37Z",
+  "level": "warning",
+  "stage": "research",
+  "message": "Gemini unavailable: all Gemini models failed: gemini-flash-lite-latest: HTTP 503 temporary server error; retries exhausted; gemini-flash-latest: HTTP 429 daily quota used up; trying original story reserve",
+  "run": "20261125163202"
+ },
+ {
+  "t": "2026-11-25T16:32:37Z",
+  "level": "error",
+  "stage": "script",
+  "message": "GeminiUnavailable: original reserve is only configured for English horror shorts",
+  "run": "20261125163202"
  }
 ]
