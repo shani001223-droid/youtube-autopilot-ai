@@ -53,6 +53,31 @@ class GeminiClientTests(unittest.TestCase):
         c, s = self.make([FakeResp(200, {"promptFeedback": {"blockReason": "SAFETY"}})], models=("m1",))
         with self.assertRaises(GeminiError): c.generate_text("x")
 
+    def test_timeout_retries_then_switches_model(self):
+        from requests import ReadTimeout
+        c, s = self.make([ok("fallback")])
+        original_post = s.post
+        attempts = []
+        def post(url, **kw):
+            attempts.append(url)
+            if "/m1:" in url:
+                raise ReadTimeout("simulated timeout")
+            return original_post(url, **kw)
+        s.post = post
+        self.assertEqual(c.generate_text("x"), "fallback")
+        self.assertEqual(len(attempts), 4)
+        self.assertIn("/m2:", attempts[-1])
+
+    def test_exhausted_server_error_keeps_http_status(self):
+        c, s = self.make([FakeResp(503)], models=("m1",))
+        with self.assertRaisesRegex(GeminiError, "HTTP 503"):
+            c.generate_text("x")
+
+    def test_retry_after_header(self):
+        c, s = self.make([FakeResp(429, headers={"Retry-After": "40"}), ok("later")])
+        self.assertEqual(c.generate_text("x"), "later")
+        self.assertEqual(self.sleeps, [40])
+
 
 if __name__ == "__main__":
     unittest.main()
