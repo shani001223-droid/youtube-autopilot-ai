@@ -649,5 +649,110 @@
   "stage": "script",
   "message": "GeminiUnavailable: original reserve is only configured for English horror shorts",
   "run": "20261125163319"
+ },
+ {
+  "t": "2026-11-25T16:34:59Z",
+  "level": "info",
+  "stage": "research",
+  "message": "topic 'The Boundary Stones of Amjhora' | folk horror | two timelines that collide | 0 trend titles",
+  "run": "20261125163455"
+ },
+ {
+  "t": "2026-11-25T16:35:24Z",
+  "level": "warning",
+  "stage": "script",
+  "message": "Gemini unavailable: all Gemini models failed: gemini-flash-lite-latest: HTTP 503 temporary server error; retries exhausted; gemini-flash-latest: HTTP 429 daily quota used up; trying original story reserve",
+  "run": "20261125163455"
+ },
+ {
+  "t": "2026-11-25T16:35:24Z",
+  "level": "info",
+  "stage": "script",
+  "message": "Using original reserve: खाली चाबी",
+  "run": "20261125163455"
+ },
+ {
+  "t": "2026-11-25T16:35:24Z",
+  "level": "info",
+  "stage": "script",
+  "message": "5 scenes; hook score 11 (WEAK, The Question)",
+  "run": "20261125163455"
+ },
+ {
+  "t": "2026-11-25T16:35:24Z",
+  "level": "info",
+  "stage": "voice",
+  "message": "12 sentences, 48.7s narration, longest gap 0.00s",
+  "run": "20261125163455"
+ },
+ {
+  "t": "2026-11-25T16:35:24Z",
+  "level": "warning",
+  "stage": "footage",
+  "message": "PEXELS_API_KEY missing; using keyless licensed media search",
+  "run": "20261125163455"
+ },
+ {
+  "t": "2026-11-25T16:35:26Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 1: commons_photo",
+  "run": "20261125163455"
+ },
+ {
+  "t": "2026-11-25T16:35:28Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 2: commons_photo",
+  "run": "20261125163455"
+ },
+ {
+  "t": "2026-11-25T16:35:29Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 3: commons_photo",
+  "run": "20261125163455"
+ },
+ {
+  "t": "2026-11-25T16:35:31Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 4: commons_photo",
+  "run": "20261125163455"
+ },
+ {
+  "t": "2026-11-25T16:35:32Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 5: commons_photo",
+  "run": "20261125163455"
+ },
+ {
+  "t": "2026-11-25T16:35:32Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "0/5 moving stock clips; 5 animated licensed photos; 0 original illustrated scenes",
+  "run": "20261125163455"
+ },
+ {
+  "t": "2026-11-25T16:36:14Z",
+  "level": "info",
+  "stage": "render",
+  "message": "1080x1920 49.3s audio=True",
+  "run": "20261125163455"
+ },
+ {
+  "t": "2026-11-25T16:36:14Z",
+  "level": "info",
+  "stage": "thumbnail",
+  "message": "title score 80; thumbnail text 'फिर क्या हुआ'",
+  "run": "20261125163455"
+ },
+ {
+  "t": "2026-11-25T16:36:14Z",
+  "level": "info",
+  "stage": "seo",
+  "message": "5 tags; description 1628 chars; uncovered queries: ['folk horror story']",
+  "run": "20261125163455"
  }
 ]
