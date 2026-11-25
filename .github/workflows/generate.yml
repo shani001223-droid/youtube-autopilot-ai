@@ -1,5 +1,8 @@
 name: Generate video
 on:
+  push:
+    branches: [main]
+    paths: [".github/workflows/generate.yml"] # smoke run after pipeline workflow upgrades
   schedule:
     - cron: "17 3 * * *"          # daily 03:17 UTC (off the hour on purpose: top-of-hour runs are delayed most)
   workflow_dispatch:
@@ -16,7 +19,7 @@ concurrency:
 jobs:
   generate:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -31,6 +34,8 @@ jobs:
         run: |
           pip install -r requirements.txt
           if [ "$DEMO" != "true" ]; then pip install -r requirements-voice.txt; fi
+      - name: Visual regression tests
+        run: python -m unittest tests.test_visual_sources -v
       - name: Cache Piper voices
         uses: actions/cache@v4
         with:
