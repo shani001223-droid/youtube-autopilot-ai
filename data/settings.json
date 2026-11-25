@@ -1,6 +1,13 @@
 {
   "version": 1,
-  "automation": { "enabled": true },
-  "publish": { "mode": "manual" },
-  "safety": { "sample_approved": false, "public_publishing_enabled": false }
+  "automation": {
+    "enabled": false
+  },
+  "publish": {
+    "mode": "manual"
+  },
+  "safety": {
+    "sample_approved": false,
+    "public_publishing_enabled": false
+  }
 }
