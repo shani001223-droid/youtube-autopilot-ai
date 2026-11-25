@@ -12,5 +12,12 @@
   "stage": "start",
   "message": "missing secrets: ['GEMINI_API_KEY']",
   "run": null
+ },
+ {
+  "t": "2026-11-25T11:41:00Z",
+  "level": "info",
+  "stage": "start",
+  "message": "automation is switched off; nothing generated",
+  "run": "20261125114100"
  }
 ]
