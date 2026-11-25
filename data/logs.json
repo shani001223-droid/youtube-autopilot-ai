@@ -26,5 +26,54 @@
   "stage": "start",
   "message": "automation is switched off; nothing generated",
   "run": "20261125114316"
+ },
+ {
+  "t": "2026-11-25T11:45:25Z",
+  "level": "info",
+  "stage": "research",
+  "message": "topic 'What the scarecrow counted' | psychological | found recording transcript | 0 trend titles",
+  "run": "20261125114525"
+ },
+ {
+  "t": "2026-11-25T11:45:25Z",
+  "level": "info",
+  "stage": "script",
+  "message": "6 scenes; hook score 49 (WEAK, The Impossible Claim)",
+  "run": "20261125114525"
+ },
+ {
+  "t": "2026-11-25T11:45:26Z",
+  "level": "info",
+  "stage": "voice",
+  "message": "9 sentences, 36.4s narration, longest gap 0.00s",
+  "run": "20261125114525"
+ },
+ {
+  "t": "2026-11-25T11:45:26Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "0/6 licensed clips; 6 generated fallback",
+  "run": "20261125114525"
+ },
+ {
+  "t": "2026-11-25T11:45:59Z",
+  "level": "info",
+  "stage": "render",
+  "message": "1080x1920 37.0s audio=True",
+  "run": "20261125114525"
+ },
+ {
+  "t": "2026-11-25T11:45:59Z",
+  "level": "info",
+  "stage": "thumbnail",
+  "message": "title score 100; thumbnail text 'HE KNEW'",
+  "run": "20261125114525"
+ },
+ {
+  "t": "2026-11-25T11:45:59Z",
+  "level": "info",
+  "stage": "seo",
+  "message": "9 tags; description 331 chars; uncovered queries: ['psychological story']",
+  "run": "20261125114525"
  }
 ]

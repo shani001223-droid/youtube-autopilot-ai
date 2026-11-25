@@ -1,1 +1,91 @@
-[]
+[
+ {
+  "status": "awaiting_approval",
+  "mode": "short",
+  "run_id": "20261125114525",
+  "demo": true,
+  "id": "20261125-114525-51ff",
+  "created_at": "2026-11-25T11:45:25Z",
+  "topic": "What the scarecrow counted",
+  "premise": "An invented demo premise.",
+  "variety": {
+   "subgenre": "psychological",
+   "structure": "found recording transcript",
+   "visual_style": "fields at dusk",
+   "music_mood": "hollow"
+  },
+  "title": "3 AM: what the scarecrow counted",
+  "thumb_text": "HE KNEW",
+  "title_issues": [],
+  "description": "What the scarecrow counted: a short original horror story.\nA new original original english horror & mystery stories - subscribe so you never miss the next one.\n\nThis is a work of fiction. The story and narration are AI-assisted; every name and event is invented.\n\nMusic: generated for this channel.\n\n#horrorstories #shorts #mystery",
+  "tags": [
+   "horror story",
+   "scary stories",
+   "short horror",
+   "mystery",
+   "creepy",
+   "fiction",
+   "night",
+   "psychological",
+   "short story"
+  ],
+  "hook": "You will never look at what the scarecrow counted the same way after tonight.",
+  "hook_score": 49,
+  "hook_formula": "The Impossible Claim",
+  "script": {
+   "scenes": [
+    {
+     "narration": "I counted the steps and there were more than before.",
+     "visual_query": "foggy forest night",
+     "mood": "dread"
+    },
+    {
+     "narration": "Nobody else in the street had heard anything at all.",
+     "visual_query": "dark hallway",
+     "mood": "dread"
+    },
+    {
+     "narration": "By morning the door stood open and the floor was wet.",
+     "visual_query": "rain window",
+     "mood": "dread"
+    },
+    {
+     "narration": "The house had been quiet for years before the sound began.",
+     "visual_query": "old house",
+     "mood": "dread"
+    },
+    {
+     "narration": "Every night it came a little closer to the door.",
+     "visual_query": "moonlit field",
+     "mood": "dread"
+    },
+    {
+     "narration": "I told myself it was only the wind in the old pipes.",
+     "visual_query": "lantern",
+     "mood": "dread"
+    }
+   ],
+   "closing_line": "The door is still open.",
+   "loop_line": "And that is why you will never look at it the same way."
+  },
+  "credits": [],
+  "video_info": {
+   "width": 1080,
+   "height": 1920,
+   "duration": 37.0,
+   "has_video": true,
+   "has_audio": true
+  },
+  "qa": {
+   "ok": true,
+   "gap_seconds": 0.0
+  },
+  "files": {
+   "video": "out/20261125-114525-51ff/video.mp4",
+   "thumb": "out/20261125-114525-51ff/thumb.jpg"
+  },
+  "preview_url": "https://github.com/shani001223-droid/youtube-autopilot-ai/releases/download/preview-20261125-114525-51ff/video.mp4",
+  "error": null,
+  "thumb_url": "https://github.com/shani001223-droid/youtube-autopilot-ai/releases/download/preview-20261125-114525-51ff/thumb.jpg"
+ }
+]
