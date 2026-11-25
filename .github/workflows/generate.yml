@@ -37,7 +37,7 @@ jobs:
           pip install -r requirements.txt
           if [ "$DEMO" != "true" ]; then pip install -r requirements-voice.txt; fi
       - name: Recovery and visual regression tests
-        run: python -m unittest tests.test_llm tests.test_recovery tests.test_visual_sources -v
+        run: python -m unittest tests.test_llm tests.test_recovery tests.test_visual_sources tests.test_scriptgen tests.test_research tests.test_cinematic_upgrade -v
       - name: Cache Piper voices
         uses: actions/cache@v4
         with:
