@@ -6,8 +6,9 @@ FONTS = ["/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", "/usr/share/fon
          "/usr/share/fonts/dejavu/DejaVuSans-Bold.ttf", "/Library/Fonts/Arial Bold.ttf"]
 
 
-def find_font(size):
-    for p in FONTS:
+def find_font(size, hindi=False):
+    fonts = ["/usr/share/fonts/truetype/noto/NotoSansDevanagari-Bold.ttf"] + FONTS if hindi else FONTS
+    for p in fonts:
         if os.path.exists(p): return ImageFont.truetype(p, size)
     return ImageFont.load_default(size)
 
@@ -19,7 +20,7 @@ def extract_frame(video, at, out, runner=subprocess.run):
 
 def _fit(draw, words, width, start):
     for size in range(start, 40, -6):
-        f = find_font(size); lines, cur = [], ""
+        f = find_font(size, hindi=any('\u0900' <= c <= '\u097f' for word in words for c in word)); lines, cur = [], ""
         for w in words:
             t = (cur + " " + w).strip()
             if draw.textlength(t, font=f) <= width or not cur: cur = t
