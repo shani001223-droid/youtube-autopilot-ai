@@ -82,5 +82,19 @@
   "stage": "publish",
   "message": "rejected",
   "run": "20261125-114525-51ff"
+ },
+ {
+  "t": "2026-11-25T11:50:25Z",
+  "level": "info",
+  "stage": "research",
+  "message": "topic 'The Last Lantern of Black Moss' | folk horror | countdown to something arriving | 0 trend titles",
+  "run": "20261125115016"
+ },
+ {
+  "t": "2026-11-25T11:50:56Z",
+  "level": "error",
+  "stage": "script",
+  "message": "GeminiError: all Gemini models failed: gemini-flash-lite-latest: retries exhausted; gemini-flash-latest: retries exhausted",
+  "run": "20261125115016"
  }
 ]
