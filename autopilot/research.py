@@ -36,8 +36,9 @@ def swipe_rank(collected, min_multiple=1.5):
 
 def trend_titles(yt, settings, now, max_queries=3):
     after = (now - timedelta(days=30)).strftime("%Y-%m-%dT%H:%M:%SZ"); seen, out = set(), []
+    options = {} if settings.get("profile", "legacy") == "legacy" else {"language": settings["niche"]["language"], "duration": "medium" if settings["content"]["mode"] == "long" else "short"}
     for q in settings["niche"]["seed_queries"][:max_queries]:
-        for v in yt.search_recent(q, after, max_results=10):
+        for v in yt.search_recent(q, after, max_results=10, **options):
             if v["id"] not in seen: seen.add(v["id"]); out.append({"id": v["id"], "title": v["title"], "channel": v.get("channel"), "channel_id": v.get("channel_id")})
     return out
 
