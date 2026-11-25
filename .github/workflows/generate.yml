@@ -4,7 +4,9 @@ on:
     branches: [main]
     paths: [".github/workflows/generate.yml"] # smoke run after pipeline workflow upgrades
   schedule:
-    - cron: "17 3 * * *"          # daily 03:17 UTC (off the hour on purpose: top-of-hour runs are delayed most)
+    - cron: "17 3 * * *"          # Hindi Shorts, 08:17 PKT
+    - cron: "43 12 * * *"         # Hindi Shorts, 17:43 PKT
+    - cron: "27 8 * * 2,6"        # English long, Tue/Sat 13:27 PKT
   workflow_dispatch:
     inputs:
       profile:
@@ -25,6 +27,11 @@ jobs:
   generate:
     runs-on: ubuntu-latest
     timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        profile: ${{ fromJSON(github.event_name == 'push' && '["hindi_shorts","english_long"]' || github.event.schedule == '27 8 * * 2,6' && '["english_long"]' || github.event_name == 'schedule' && '["hindi_shorts"]' || format('["{0}"]', inputs.profile || 'legacy')) }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -42,7 +49,7 @@ jobs:
           pip install -r requirements.txt
           if [ "$DEMO" != "true" ]; then pip install -r requirements-voice.txt; fi
       - name: Recovery and visual regression tests
-        run: python -m unittest tests.test_llm tests.test_recovery tests.test_visual_sources tests.test_scriptgen tests.test_research tests.test_cinematic_upgrade tests.test_channel_profiles -v
+        run: python -m unittest tests.test_llm tests.test_recovery tests.test_visual_sources tests.test_scriptgen tests.test_research tests.test_cinematic_upgrade tests.test_channel_profiles tests.test_production -v
       - name: Cache Piper voices
         uses: actions/cache@v4
         with:
@@ -51,7 +58,12 @@ jobs:
       - name: Generate
         id: gen
         env:
-          PROFILE: ${{ inputs.profile || 'legacy' }}
+          PROFILE: ${{ matrix.profile }}
+          EVENT: ${{ github.event_name }}
+          GEMINI_TTS_MODEL: ${{ vars.GEMINI_TTS_MODEL }}
+          GEMINI_IMAGE_MODEL: ${{ vars.GEMINI_IMAGE_MODEL }}
+          ALLOW_PAID_IMAGE_API: ${{ vars.ALLOW_PAID_IMAGE_API }}
+          AI_IMAGE_MAX_CALLS: ${{ vars.AI_IMAGE_MAX_CALLS }}
           DEMO: ${{ inputs.demo }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
@@ -61,6 +73,7 @@ jobs:
         run: |
           ARGS=""
           if [ "$DEMO" = "true" ]; then ARGS="--demo"; fi
+          if [ "$EVENT" != "workflow_dispatch" ]; then ARGS="$ARGS --scheduled"; fi
           python -m autopilot generate --profile "$PROFILE" $ARGS
       - name: Publish preview (GitHub Release, deleted after review)
         if: steps.gen.outputs.STATUS == 'awaiting_approval'
