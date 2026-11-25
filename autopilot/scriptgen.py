@@ -101,19 +101,28 @@ def build_script_prompt(settings, topic, variety):
     n, c = settings["niche"], settings["content"]
     with open(os.path.join(os.path.dirname(__file__), "skills", "hooks.json"), encoding="utf-8") as fh:
         formulas = ", ".join(f["name"] for f in json.load(fh)["hooks"][:21])
-    target = words_for_seconds(c["short_target_seconds"])
+    long = c["mode"] == "long"
+    seconds = c["long_target_minutes"] * 60 if long else c["short_target_seconds"]
+    target = words_for_seconds(seconds)
+    language = "natural spoken Hindi in Devanagari" if n.get("language") == "hi" else "natural spoken English"
+    format_name = "horizontal long-form" if long else "vertical short-form"
+    scene_count = "24-40" if long else "5-8"
+    pacing = "Build three escalating acts, with a new clue or reversal every 30-45 seconds; resolve the central mystery." if long else "Open immediately, escalate every scene, and land a surprising but earned final twist."
     return f"""[task:script]
-You write original {n['name']} for a vertical video channel. Audience: {n['audience']}. Tone: {n['tone']}.
+You write original {n['name']} for a {format_name} video channel. Audience: {n['audience']}. Tone: {n['tone']}.
 TOPIC: {topic.get('topic')} | PREMISE: {topic.get('premise')} | ANGLE: {topic.get('angle')}
 SUBGENRE: {variety['subgenre']} | STRUCTURE: {variety['structure']} | VISUAL STYLE: {variety['visual_style']}
-LENGTH: about {target} spoken words in total ({c['short_target_seconds']} seconds at 150 words per minute), 5-8 scenes.
+LENGTH: about {target} spoken words in total ({seconds} seconds at 150 words per minute), {scene_count} scenes.
+LANGUAGE: {language} for all spoken lines, titles and thumbnail text; keep visual_query in English for media search.
+PACING: {pacing}
 
 RULES (non-negotiable):
+- Invent a distinct protagonist, setting, central mystery, clue progression and resolution; avoid familiar stock twists unless transformed into a genuinely different mechanism.
 - 100% original fiction. No real people, real crimes, real tragedies, brands or copyrighted characters. No gore, no sexual content, nothing involving harm to children, no suicide or self-harm.
 - Open on a complete thought (a viewer who has seen nothing else must understand line one). Include one turn that complicates the opening. End on a line, not a trail-off.
 - Write 5 DIFFERENT hooks (each 9-24 words, speak to 'you' or raise a question the viewer cannot close). Formulas to draw on: {formulas}.
-- loop_line must set up the first hook so the video loops. closing_line is one short sentence.
-- visual_query for each scene: 2-4 words describing SCENERY or OBJECTS only (fog, hallway, lantern, empty road). Never people, faces, bodies or hands.
+- For Shorts, loop_line must set up the first hook. For long-form, loop_line is a short final unsettling callback rather than a forced loop. closing_line is one short sentence.
+- visual_query for each scene: 2-6 concrete English words describing the exact key SCENERY or OBJECT in the narration. Prefer specific, visually distinct shots (cracked station clock, rain-soaked ticket window, rusted railway signal). Maintain location, weather and time-of-day continuity. Alternate establishing shots, detail shots and reveal shots; never people, faces, bodies or hands. Do not reuse identical queries.
 - Keep every sentence speakable aloud. No stage directions, no emoji, no hashtags in narration.
 - title_ideas: 6 titles under 60 characters, front-load the subject, include a number or a name when natural. thumbnail_text: 3 options of at most 3 words that do NOT repeat the title's words.
 - tags: 10 short search phrases people actually type.
