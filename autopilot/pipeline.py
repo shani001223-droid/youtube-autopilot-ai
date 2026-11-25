@@ -38,9 +38,12 @@ def run_generate(settings, store, deps, workdir, run_id=None, demo=False):
     log = lambda level, stage, msg: store.log(level, stage, msg, run_id)
     if not settings["automation"]["enabled"]:
         log("info", "start", "automation is switched off; nothing generated"); return None
-    if settings["content"]["mode"] == "long":
-        log("error", "start", "long-form generation is not implemented in V1; set content.mode to 'shorts'"); return None
-    item = store.add_item({"status": "generating", "mode": "short", "run_id": run_id, "demo": bool(demo)}); iid = item["id"]; stage = "research"
+    long = settings["content"]["mode"] == "long"
+    profile = settings.get("profile", "legacy")
+    if long and profile != "english_long":
+        log("error", "start", "long-form requires the english_long preview profile"); return None
+    width, height = (1920, 1080) if long else (1080, 1920)
+    item = store.add_item({"status": "generating", "mode": "long" if long else "short", "profile": profile, "language": settings["niche"]["language"], "run_id": run_id, "demo": bool(demo)}); iid = item["id"]; stage = "research"
     try:
         history = [i for i in store.items() if i["id"] != iid and i.get("variety")]
         recent = [i["topic"] for i in history if i.get("topic")]; insights = store.read_json("insights.json", {})
@@ -83,21 +86,26 @@ def run_generate(settings, store, deps, workdir, run_id=None, demo=False):
         log("info", "footage", f"{got}/{len(clips)} moving stock clips; {photos} animated licensed photos; {len(clips)-got-photos} original illustrated scenes")
 
         stage = "render"; mus = out / "music.wav"; music.make_ambient(sum(durations) + 1, mus, variety["music_mood"], deps.rng.randint(0, 99), runner=deps.runner)
-        ass = out / "captions.ass"; subtitles.write_ass(ass, subtitles.word_timings(vo["timeline"])); video = out / "video.mp4"
+        ass = out / "captions.ass"
+        caption_options = {"width": width, "height": height, "size": 54, "margin_v": 100} if long else {}
+        if settings["niche"]["language"] == "hi": caption_options["font"] = "Noto Sans Devanagari"
+        subtitles.write_ass(ass, subtitles.word_timings(vo["timeline"]), **caption_options); video = out / "video.mp4"
         info = render.render_video([{"path": c["path"], "duration": d, "query": q} for c, d, q in zip(clips, durations, queries)], vo["wav"], mus, ass, video, out / "work",
-                                   runner=deps.runner, music_volume=settings["audio"]["music_volume"])
+                                   runner=deps.runner, music_volume=settings["audio"]["music_volume"], **({"width": width, "height": height} if long else {}))
         log("info", "render", f"{info['width']}x{info['height']} {info['duration']:.1f}s audio={info['has_audio']}")
-        if not info.get("has_video") or not info.get("has_audio") or (info.get("width"), info.get("height")) != (1080, 1920) or not 20 <= info.get("duration", 0) <= 60:
-            raise GateError("Rendered video failed vertical video/audio/duration quality gate")
+        target = settings["content"]["long_target_minutes"] * 60
+        low, high = (target * 0.65, target * 1.4) if long else (20, 60)
+        if not info.get("has_video") or not info.get("has_audio") or (info.get("width"), info.get("height")) != (width, height) or not low <= info.get("duration", 0) <= high:
+            raise GateError("Rendered video failed resolution/audio/duration quality gate")
 
         stage = "thumbnail"; choice = seo.choose_title(script["title_ideas"], script["thumbnail_text"]); thumb = out / "thumb.jpg"; frame = out / "frame.jpg"
         thumbnail.extract_frame(out / "work" / "joined.mp4", min(1.0, info["duration"] / 2), frame, runner=deps.runner)   # caption-free source
-        thumbnail.make_thumbnail(frame, choice["thumb_text"], thumb)
+        thumbnail.make_thumbnail(frame, choice["thumb_text"], thumb, **({"size": (1280, 720)} if long else {}))
         if not thumb.exists() or not video.exists(): raise RuntimeError("expected output file is missing after render/thumbnail")
         log("info", "thumbnail", f"title score {choice['score']}; thumbnail text '{choice['thumb_text']}'")
 
         stage = "seo"; credits = [c["credit"] for c in clips if c["credit"]]
-        desc = seo.build_description(script, choice["title"], credits, settings); tags = seo.clean_tags(script["tags"] + [variety["subgenre"], "short story"])
+        desc = seo.build_description(script, choice["title"], credits, settings); tags = seo.clean_tags(script["tags"] + [variety["subgenre"], "horror story" if long else "short story"])
         missing = seo.query_test(choice["title"], desc, [f"{variety['subgenre']} story", topic["topic"]])
         log("info", "seo", f"{len(tags)} tags; description {len(desc)} chars" + (f"; uncovered queries: {missing}" if missing else ""))
 
@@ -125,6 +133,8 @@ def run_publish(settings, store, item_id, action, yt=None, workdir="out", video_
             return item
         raise GateError("only a generated video awaiting review can be approved")
     taken = [i["publish_at"] for i in store.items() if i.get("publish_at")]; plan = safety.publish_plan(settings, now, taken)
+    if item.get("profile", "legacy") != "legacy":
+        plan = {"mode": "manual", "reason": "Separate channel OAuth not verified; preview profile is manual-only."}
     if plan["mode"] == "manual":
         log("info", plan["reason"]); return store.update(item_id, status="approved_manual", plan=plan, error=None)
     if not safety.can_upload_today(settings, store.items(), now):
