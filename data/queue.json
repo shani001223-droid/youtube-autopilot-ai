@@ -72,13 +72,13 @@
   "video_info": {
    "width": 1080,
    "height": 1920,
-   "duration": 37.0,
+   "duration": 37,
    "has_video": true,
    "has_audio": true
   },
   "qa": {
    "ok": true,
-   "gap_seconds": 0.0
+   "gap_seconds": 0
   },
   "files": {
    "video": "out/20261125-114525-51ff/video.mp4",
@@ -139,7 +139,7 @@
   "error": "RuntimeError: piper failed: /lib/python3.12/site-packages/piper/__main__.py\", line 258, in <module>\n    main()\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/piper/__main__.py\", line 143, in main\n    raise ValueError(\nValueError: Unable to find voice: en_US-john-medium (use piper.download_voices)\n"
  },
  {
-  "status": "awaiting_approval",
+  "status": "rejected",
   "mode": "short",
   "run_id": "20261125124718",
   "demo": false,
@@ -220,15 +220,16 @@
   },
   "qa": {
    "ok": true,
-   "gap_seconds": 0.0
+   "gap_seconds": 0
   },
   "files": {
    "video": "out/20261125-124718-66b2/video.mp4",
    "thumb": "out/20261125-124718-66b2/thumb.jpg"
   },
-  "preview_url": "https://github.com/shani001223-droid/youtube-autopilot-ai/releases/download/preview-20261125-124718-66b2/video.mp4",
+  "preview_url": null,
   "error": null,
-  "thumb_url": "https://github.com/shani001223-droid/youtube-autopilot-ai/releases/download/preview-20261125-124718-66b2/thumb.jpg"
+  "thumb_url": null,
+  "recovery_note": "Recovered prior rejected review action after GitHub state merge conflict; preview release had already been deleted."
  },
  {
   "status": "failed",
