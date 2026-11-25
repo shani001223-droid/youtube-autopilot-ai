@@ -20,7 +20,9 @@ def pick_file(video, min_height=1280):
     portrait = [f for f in mp4 if f["height"] > f["width"] and f["height"] >= min_height]
     if portrait: return min(portrait, key=lambda f: abs(f["height"] - 1920))
     land = [f for f in mp4 if f["width"] >= f["height"] and f["height"] >= 1080]       # centre-cropped later
-    return min(land, key=lambda f: abs(f["height"] - 1080)) if land else None
+    if land: return min(land, key=lambda f: abs(f["height"] - 1080))
+    smaller = [f for f in mp4 if f["height"] >= 720]
+    return max(smaller, key=lambda f: f["height"]) if smaller else None
 
 
 def attribution(video):
@@ -50,9 +52,13 @@ def select_clips(pexels, queries, durations, workdir, used_ids=None, log=lambda 
         chosen = None
         if not down:
             for query in [q] + FALLBACKS[i % len(FALLBACKS):] + FALLBACKS[:i % len(FALLBACKS)]:
-                try: vids = pexels.search_videos(query)
+                try:
+                    vids = pexels.search_videos(query)
+                    if not vids and isinstance(pexels, PexelsClient):
+                        vids = pexels.search_videos(query, orientation="landscape")
                 except Exception as ex:
-                    log("warning", f"Pexels unavailable ({type(ex).__name__}); using generated visuals"); down = True; break
+                    status = getattr(getattr(ex, "response", None), "status_code", None)
+                    log("warning", f"Pexels unavailable ({type(ex).__name__}, HTTP {status or 'unknown'}); trying alternate sources"); down = True; break
                 for v in vids:
                     f = pick_file(v)
                     if v["id"] not in used and is_people_free(v) and f: chosen = (v, f); break
