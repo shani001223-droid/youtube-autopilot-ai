@@ -75,5 +75,12 @@
   "stage": "seo",
   "message": "9 tags; description 331 chars; uncovered queries: ['psychological story']",
   "run": "20261125114525"
+ },
+ {
+  "t": "2026-11-25T11:49:32Z",
+  "level": "info",
+  "stage": "publish",
+  "message": "rejected",
+  "run": "20261125-114525-51ff"
  }
 ]
