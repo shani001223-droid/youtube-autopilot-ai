@@ -19,5 +19,12 @@
   "stage": "start",
   "message": "automation is switched off; nothing generated",
   "run": "20261125114100"
+ },
+ {
+  "t": "2026-11-25T11:43:16Z",
+  "level": "info",
+  "stage": "start",
+  "message": "automation is switched off; nothing generated",
+  "run": "20261125114316"
  }
 ]
