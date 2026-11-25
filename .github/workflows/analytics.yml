@@ -41,6 +41,21 @@ jobs:
           YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
           YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
         run: python -m autopilot comments
+      - name: Hindi and English channel analytics (separate credentials)
+        env:
+          YT_HINDI_CLIENT_ID: ${{ secrets.YT_HINDI_CLIENT_ID }}
+          YT_HINDI_CLIENT_SECRET: ${{ secrets.YT_HINDI_CLIENT_SECRET }}
+          YT_HINDI_REFRESH_TOKEN: ${{ secrets.YT_HINDI_REFRESH_TOKEN }}
+          YT_HINDI_CHANNEL_ID: ${{ vars.YT_HINDI_CHANNEL_ID }}
+          YT_ENGLISH_CLIENT_ID: ${{ secrets.YT_ENGLISH_CLIENT_ID }}
+          YT_ENGLISH_CLIENT_SECRET: ${{ secrets.YT_ENGLISH_CLIENT_SECRET }}
+          YT_ENGLISH_REFRESH_TOKEN: ${{ secrets.YT_ENGLISH_REFRESH_TOKEN }}
+          YT_ENGLISH_CHANNEL_ID: ${{ vars.YT_ENGLISH_CHANNEL_ID }}
+        run: |
+          rc=0
+          if [ -n "$YT_HINDI_REFRESH_TOKEN" ]; then python -m autopilot analytics --profile hindi_shorts || rc=1; fi
+          if [ -n "$YT_ENGLISH_REFRESH_TOKEN" ]; then python -m autopilot analytics --profile english_long || rc=1; fi
+          exit "$rc"
       - name: Save state
         if: always()
         run: |
