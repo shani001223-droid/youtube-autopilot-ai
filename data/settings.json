@@ -1,7 +1,7 @@
 {
   "version": 1,
   "automation": {
-    "enabled": true
+    "enabled": false
   },
   "publish": {
     "mode": "manual"
