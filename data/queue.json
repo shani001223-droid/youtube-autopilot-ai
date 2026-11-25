@@ -127,5 +127,15 @@
   "created_at": "2026-11-25T12:27:31Z",
   "failed_stage": "research",
   "error": "ReadTimeout: HTTPSConnectionPool(host='generativelanguage.googleapis.com', port=443): Read timed out. (read timeout=90)"
+ },
+ {
+  "status": "failed",
+  "mode": "short",
+  "run_id": "20261125123926",
+  "demo": false,
+  "id": "20261125-123926-9d02",
+  "created_at": "2026-11-25T12:39:26Z",
+  "failed_stage": "voice",
+  "error": "RuntimeError: piper failed: /lib/python3.12/site-packages/piper/__main__.py\", line 258, in <module>\n    main()\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/piper/__main__.py\", line 143, in main\n    raise ValueError(\nValueError: Unable to find voice: en_US-john-medium (use piper.download_voices)\n"
  }
 ]

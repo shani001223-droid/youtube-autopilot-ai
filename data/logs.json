@@ -124,5 +124,26 @@
   "stage": "research",
   "message": "ReadTimeout: HTTPSConnectionPool(host='generativelanguage.googleapis.com', port=443): Read timed out. (read timeout=90)",
   "run": "20261125122731"
+ },
+ {
+  "t": "2026-11-25T12:39:28Z",
+  "level": "info",
+  "stage": "research",
+  "message": "topic 'The Bellringer's Last Shift' | haunted places | two timelines that collide | 0 trend titles",
+  "run": "20261125123926"
+ },
+ {
+  "t": "2026-11-25T12:39:36Z",
+  "level": "info",
+  "stage": "script",
+  "message": "6 scenes; hook score 47 (WEAK, The Question)",
+  "run": "20261125123926"
+ },
+ {
+  "t": "2026-11-25T12:39:37Z",
+  "level": "error",
+  "stage": "voice",
+  "message": "RuntimeError: piper failed: /lib/python3.12/site-packages/piper/__main__.py\", line 258, in <module>\n    main()\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/piper/__main__.py\", line 143, in main\n    raise ValueError(\nValueError: Unable to find voice: en_US-john-medium (use piper.download_voices)\n",
+  "run": "20261125123926"
  }
 ]
