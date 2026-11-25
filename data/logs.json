@@ -306,5 +306,12 @@
   "stage": "seo",
   "message": "6 tags; description 1560 chars; uncovered queries: ['psychological story']",
   "run": "20261125133116"
+ },
+ {
+  "t": "2026-11-25T14:37:37Z",
+  "level": "info",
+  "stage": "publish",
+  "message": "manual mode: nothing is sent to YouTube; upload by hand from the YouTube app",
+  "run": "20261125-133116-f8f2"
  }
 ]

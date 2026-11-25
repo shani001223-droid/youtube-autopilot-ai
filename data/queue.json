@@ -252,7 +252,7 @@
   "error": "GeminiError: all Gemini models failed: gemini-flash-lite-latest: HTTP 503 temporary server error; retries exhausted; gemini-flash-latest: HTTP 429 daily quota used up"
  },
  {
-  "status": "awaiting_approval",
+  "status": "approved_manual",
   "mode": "short",
   "run_id": "20261125133116",
   "demo": false,
@@ -349,6 +349,13 @@
   "preview_url": "https://github.com/shani001223-droid/youtube-autopilot-ai/releases/download/preview-20261125-133116-f8f2/video.mp4",
   "error": null,
   "script_source": "original_reserve",
-  "thumb_url": "https://github.com/shani001223-droid/youtube-autopilot-ai/releases/download/preview-20261125-133116-f8f2/thumb.jpg"
+  "thumb_url": "https://github.com/shani001223-droid/youtube-autopilot-ai/releases/download/preview-20261125-133116-f8f2/thumb.jpg",
+  "plan": {
+   "mode": "manual",
+   "privacy": "private",
+   "publish_at": null,
+   "will_be_public": false,
+   "reason": "manual mode: nothing is sent to YouTube; upload by hand from the YouTube app"
+  }
  }
 ]
