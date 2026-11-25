@@ -46,7 +46,15 @@ def render_video(spec, voice, music, ass, out, workdir, runner=subprocess.run, m
     wd = Path(workdir); wd.mkdir(parents=True, exist_ok=True); segs = []
     for i, it in enumerate(spec):
         seg = wd / f"seg_{i:02d}.mp4"
-        _run(segment_args(it["path"], it["duration"], seg) if it.get("path") else fallback_segment_args(it["duration"], seg, i), runner); segs.append(seg)
+        if it.get("path"):
+            try:
+                _run(segment_args(it["path"], it["duration"], seg), runner)
+            except RuntimeError:
+                print(f"Warning: source clip {i + 1} could not be decoded; using generated background.", flush=True)
+                _run(fallback_segment_args(it["duration"], seg, i), runner)
+        else:
+            _run(fallback_segment_args(it["duration"], seg, i), runner)
+        segs.append(seg)
     lst = wd / "concat.txt"; lst.write_text("".join(f"file '{p.resolve()}'\n" for p in segs))
     joined = wd / "joined.mp4"; _run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", str(lst), "-c", "copy", str(joined)], runner)
     (wd / "subs.ass").write_bytes(Path(ass).read_bytes()); total = sum(i["duration"] for i in spec)
