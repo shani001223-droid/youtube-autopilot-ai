@@ -40,10 +40,14 @@ def query_test(title, description, queries):
 def build_description(script, title, credits, settings, chapters=None):
     n = settings["niche"]
     lines = [script["logline"].strip(), f"A new original {n['name'].lower()} - subscribe so you never miss the next one.", ""]
+    if n.get("language") == "hi":
+        lines = [script["logline"].strip(), "नई मौलिक डरावनी कहानियों के लिए चैनल को सब्सक्राइब करें।", ""]
     if chapters: lines += chapters + [""]
     lines += ["This is a work of fiction. The story and narration are AI-assisted; every name and event is invented.", ""]
     if credits: lines += ["Footage:"] + sorted(set(credits)) + [""]
-    lines += ["Music: generated for this channel.", "", "#horrorstories #shorts #mystery"]
+    tags = "#horrorstories #mystery" + (" #shorts" if settings["content"]["mode"] == "shorts" else "")
+    if n.get("language") == "hi": tags += " #hindikahani #hindihorror"
+    lines += ["Music: generated for this channel.", "", tags]
     return re.sub(r"[<>]", "", "\n".join(lines))[:4900]
 
 
