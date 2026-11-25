@@ -50,7 +50,7 @@ def run_generate(settings, store, deps, workdir, run_id=None, demo=False):
     item = store.add_item({"status": "generating", "mode": "long" if long else "short", "profile": profile, "language": settings["niche"]["language"], "run_id": run_id, "demo": bool(demo)}); iid = item["id"]; stage = "research"
     try:
         history = [i for i in store.items() if i["id"] != iid and i.get("variety")]
-        recent = [i["topic"] for i in history if i.get("topic") and not i.get("demo")]; insights = store.read_json("insights.json", {}) if profile == "legacy" else {}
+        recent = [i["topic"] for i in history if i.get("topic") and (demo or not i.get("demo"))]; insights = store.read_json("insights.json", {}) if profile == "legacy" else {}
         variety = scriptgen.pick_variety(settings, history, insights, deps.rng); trends = []
         if deps.yt:
             try: trends = research.trend_titles(deps.yt, settings, deps.now)
@@ -162,6 +162,8 @@ def run_publish(settings, store, item_id, action, yt=None, workdir="out", video_
 
 
 def approve_sample(settings, store, item_id):
+    if store.get(item_id).get("profile", "legacy") != "legacy":
+        raise GateError("new channel samples require separate channel authorization; legacy approval unchanged")
     if store.get(item_id).get("status") not in ("approved_manual", "uploaded_private", "scheduled", "published"):
         raise GateError("approve a video (and review it on YouTube) before marking it as the sample")
     s = config.deep_merge(settings, {"safety": {"sample_approved": True, "sample_item_id": item_id}}); store.log("info", "gate", f"sample approved: {item_id}"); return s
