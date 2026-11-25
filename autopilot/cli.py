@@ -30,12 +30,16 @@ def _out(**kv):
 def main(argv=None, env=None):
     env = os.environ if env is None else env
     ap = argparse.ArgumentParser(prog="autopilot"); ap.add_argument("--data", default="data"); sub = ap.add_subparsers(dest="cmd", required=True)
-    g = sub.add_parser("generate"); g.add_argument("--demo", action="store_true"); g.add_argument("--workdir", default="out")
+    g = sub.add_parser("generate"); g.add_argument("--demo", action="store_true"); g.add_argument("--workdir", default="out"); g.add_argument("--profile", choices=["legacy", "hindi_shorts", "english_long"], default="legacy")
     p = sub.add_parser("publish"); p.add_argument("--id", required=True); p.add_argument("--action", required=True); p.add_argument("--video-url"); p.add_argument("--workdir", default="out")
     s = sub.add_parser("settings-action"); s.add_argument("--action", required=True, choices=["approve_sample", "enable_public", "disable_public"]); s.add_argument("--id")
     r = sub.add_parser("set-preview"); r.add_argument("--id", required=True); r.add_argument("--url", required=True); r.add_argument("--thumb-url")
     for name in ("analytics", "comments", "plan", "doctor", "validate-settings"): sub.add_parser(name)
     a = ap.parse_args(argv); sp = os.path.join(a.data, "settings.json"); settings = config.load_settings(sp); store = Store(a.data)
+
+    if a.cmd == "generate":
+        from .profiles import select_profile
+        settings = select_profile(settings, a.profile)
 
     if a.cmd == "doctor": print(json.dumps(doctor(env, settings), indent=2)); return 0
     errs = config.validate_settings(settings)
@@ -54,7 +58,7 @@ def main(argv=None, env=None):
             v = settings["voice"]
             deps = pipeline.Deps(llm=llm,
                                  pexels=PexelsClient(env["PEXELS_API_KEY"]) if env.get("PEXELS_API_KEY") else None, yt=_yt(env),
-                                 synth_fn=tts.piper_synth(v["model"], "voices", allow_noncommercial=v["allow_noncommercial"], length_scale=v["length_scale"]),
+                                 synth_fn=tts.hindi_preview_synth if v["model"] == "hi-preview-espeak" else tts.piper_synth(v["model"], "voices", allow_noncommercial=v["allow_noncommercial"], length_scale=v["length_scale"]),
                                  rng=random.Random(), now=now)
         item = pipeline.run_generate(settings, store, deps, a.workdir, demo=a.demo)
         if item is None: _out(ITEM_ID="", STATUS="skipped"); return 0
