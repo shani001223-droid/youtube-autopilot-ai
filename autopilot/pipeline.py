@@ -50,7 +50,7 @@ def run_generate(settings, store, deps, workdir, run_id=None, demo=False):
     item = store.add_item({"status": "generating", "mode": "long" if long else "short", "profile": profile, "language": settings["niche"]["language"], "run_id": run_id, "demo": bool(demo)}); iid = item["id"]; stage = "research"
     try:
         history = [i for i in store.items() if i["id"] != iid and i.get("variety")]
-        recent = [i["topic"] for i in history if i.get("topic") and (demo or not i.get("demo"))]; insights = store.read_json("insights.json", {}) if profile == "legacy" else {}
+        recent = [i["topic"] for i in history if i.get("topic") and (demo or not i.get("demo"))]; insights = store.read_json("insights.json" if profile == "legacy" else f"insights_{profile}.json", {})
         variety = scriptgen.pick_variety(settings, history, insights, deps.rng); trends = []
         if deps.yt:
             try: trends = research.trend_titles(deps.yt, settings, deps.now)
