@@ -86,5 +86,59 @@ class RenderTests(unittest.TestCase):
             self.assertEqual(Image.open(out).size, (1080, 1920))
 
 
+
+class PiperDownloadTests(unittest.TestCase):
+    def test_missing_voice_downloaded_once_and_local_files_used(self):
+        from pathlib import Path
+        from types import SimpleNamespace
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d) / "voices"
+            calls = []
+            def fake(cmd, **kwargs):
+                calls.append(cmd)
+                if "piper.download_voices" in cmd:
+                    (root / "en_US-john-medium.onnx").write_bytes(b"fake model")
+                    (root / "en_US-john-medium.onnx.json").write_text("{}")
+                else:
+                    self.assertIn(str(root / "en_US-john-medium.onnx"), cmd)
+                    self.assertIn(str(root / "en_US-john-medium.onnx.json"), cmd)
+                    sine_synth(kwargs["input"], cmd[cmd.index("--output-file") + 1])
+                return SimpleNamespace(returncode=0, stderr="", stdout="")
+            synth = tts.piper_synth("en_US-john-medium", root, runner=fake)
+            synth("First sentence.", Path(d) / "first.wav")
+            synth("Second sentence.", Path(d) / "second.wav")
+            self.assertEqual(sum("piper.download_voices" in cmd for cmd in calls), 1)
+            self.assertGreater(tts.wav_duration(Path(d) / "second.wav"), 0)
+
+    def test_existing_voice_does_not_download(self):
+        from pathlib import Path
+        from types import SimpleNamespace
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            (root / "en_US-john-medium.onnx").write_bytes(b"fake model")
+            (root / "en_US-john-medium.onnx.json").write_text("{}")
+            def fake(cmd, **kwargs):
+                self.assertNotIn("piper.download_voices", cmd)
+                sine_synth(kwargs["input"], cmd[cmd.index("--output-file") + 1])
+                return SimpleNamespace(returncode=0, stderr="", stdout="")
+            tts.piper_synth("en_US-john-medium", root, runner=fake)("Hello.", root / "out.wav")
+
+
+class FootageRecoveryTests(unittest.TestCase):
+    def test_failed_download_falls_back(self):
+        from autopilot import footage
+        class BrokenPexels:
+            def search_videos(self, query):
+                return [{"id": 1, "url": "https://www.pexels.com/video/fog-1/",
+                         "video_files": [{"file_type": "video/mp4", "width": 1080,
+                                          "height": 1920, "link": "https://example.com/clip.mp4"}]}]
+            def download(self, url, dest):
+                dest.write_bytes(b"partial")
+                raise OSError("download failed")
+        with tempfile.TemporaryDirectory() as d:
+            clips = footage.select_clips(BrokenPexels(), ["fog"], [3], d)
+            self.assertIsNone(clips[0]["path"])
+            self.assertFalse(os.path.exists(os.path.join(d, "clip_0.mp4")))
+
 if __name__ == "__main__":
     unittest.main()
