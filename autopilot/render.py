@@ -31,6 +31,15 @@ def segment_args(src, dur, out, w=W, h=H, fps=FPS, ffmpeg="ffmpeg"):
             "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p", str(out)]
 
 
+def still_segment_args(src, dur, out, w=W, h=H, fps=FPS, ffmpeg="ffmpeg"):
+    frames = max(1, round(dur * fps))
+    vf = (f"scale={w*2}:{h*2}:force_original_aspect_ratio=increase,crop={w*2}:{h*2},"
+          f"zoompan=z='1.02+0.13*on/{frames}':x='iw/2-iw/zoom/2':y='ih/2-ih/zoom/2':"
+          f"d={frames}:s={w}x{h}:fps={fps},setsar=1,format=yuv420p")
+    return [ffmpeg,"-y","-loglevel","error","-i",str(src),"-vf",vf,"-frames:v",str(frames),
+            "-an","-c:v","libx264","-preset","veryfast","-crf","20","-pix_fmt","yuv420p",str(out)]
+
+
 def fallback_segment_args(dur, out, seed=0, w=W, h=H, fps=FPS, ffmpeg="ffmpeg"):
     tint = ["16202b", "142420", "201a28", "1e1e1e"][seed % 4]
     return [ffmpeg, "-y", "-loglevel", "error", "-f", "lavfi", "-i", f"color=c=0x{tint}:s={w}x{h}:r={fps}:d={dur:.3f}",
@@ -46,14 +55,18 @@ def render_video(spec, voice, music, ass, out, workdir, runner=subprocess.run, m
     wd = Path(workdir); wd.mkdir(parents=True, exist_ok=True); segs = []
     for i, it in enumerate(spec):
         seg = wd / f"seg_{i:02d}.mp4"
-        if it.get("path"):
-            try:
-                _run(segment_args(it["path"], it["duration"], seg), runner)
-            except RuntimeError:
-                print(f"Warning: source clip {i + 1} could not be decoded; using generated background.", flush=True)
-                _run(fallback_segment_args(it["duration"], seg, i), runner)
-        else:
-            _run(fallback_segment_args(it["duration"], seg, i), runner)
+        try:
+            if not it.get("path"):
+                raise RuntimeError("missing scene asset")
+            is_still = Path(it["path"]).suffix.lower() in {".jpg", ".jpeg", ".png"}
+            args = still_segment_args if is_still else segment_args
+            _run(args(it["path"], it["duration"], seg), runner)
+        except RuntimeError:
+            from .illustration import draw_scene
+            print(f"Warning: scene {i + 1} unavailable; rendering original illustration.", flush=True)
+            still = wd / f"recovery_{i}.jpg"
+            draw_scene(it.get("query", "foggy forest night"), still, i)
+            _run(still_segment_args(still, it["duration"], seg), runner)
         segs.append(seg)
     lst = wd / "concat.txt"; lst.write_text("".join(f"file '{p.resolve()}'\n" for p in segs))
     joined = wd / "joined.mp4"; _run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", str(lst), "-c", "copy", str(joined)], runner)
