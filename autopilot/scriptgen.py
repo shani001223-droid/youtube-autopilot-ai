@@ -47,10 +47,10 @@ def normalize_script(raw):
     if isinstance(raw, list) and raw and isinstance(raw[0], dict): raw = raw[0]
     if not isinstance(raw, dict): raise ScriptError("model did not return a JSON object")
     clean = lambda x: str(x or "").strip()
-    scenes = [{"narration": clean(s.get("narration")), "visual_query": clean(s.get("visual_query")), "mood": clean(s.get("mood")) or "dread"}
+    scenes = [{"narration": clean(s.get("narration")), "visual_query": clean(s.get("visual_query")), "mood": clean(s.get("mood")) or "dread", "visual_prompt": clean(s.get("visual_prompt"))}
               for s in raw.get("scenes", []) if isinstance(s, dict)]
     lst = lambda k: [clean(x) for x in raw.get(k, []) if clean(x)]
-    return {"logline": clean(raw.get("logline")), "title_ideas": lst("title_ideas"), "thumbnail_text": lst("thumbnail_text"), "hooks": lst("hooks"),
+    return {"continuity": clean(raw.get("continuity")), "logline": clean(raw.get("logline")), "title_ideas": lst("title_ideas"), "thumbnail_text": lst("thumbnail_text"), "hooks": lst("hooks"),
             "scenes": scenes, "closing_line": clean(raw.get("closing_line")), "loop_line": clean(raw.get("loop_line")), "tags": lst("tags"),
             "content_notes": raw.get("content_notes") if isinstance(raw.get("content_notes"), dict) else {}}
 
@@ -77,6 +77,11 @@ def validate_script(script, settings):
     if not 0.65 * target <= n <= 1.4 * target: e.append(f"spoken words {n}; target about {target} (allowed {int(.65 * target)}-{int(1.4 * target)})")
     if script["hooks"] and len(script["hooks"][0].split()) > 30: e.append("first hook is too long to land in 10 seconds")
     text = " ".join(s["narration"] for s in script["scenes"]) + " " + script["closing_line"] + " " + script["loop_line"]
+    if settings.get("profile") == "hindi_shorts" and len(re.findall(r"[\u0900-\u097f]", text)) < len(re.findall(r"[A-Za-z]", text)):
+        e.append("Hindi narration must use Devanagari, not English")
+    if settings.get("profile") in ("hindi_shorts", "english_long"):
+        queries = [s["visual_query"].strip().casefold() for s in script["scenes"]]
+        if len(set(queries)) != len(queries): e.append("each scene needs a distinct visual query")
     for rx, label in BANNED:
         if rx.search(text): e.append(f"banned content: {label}")
     for sent in re.split(r"(?<=[.!?])\s+", text):
@@ -115,6 +120,7 @@ SUBGENRE: {variety['subgenre']} | STRUCTURE: {variety['structure']} | VISUAL STY
 LENGTH: about {target} spoken words in total ({seconds} seconds at 150 words per minute), {scene_count} scenes.
 LANGUAGE: {language} for all spoken lines, titles and thumbnail text; keep visual_query in English for media search.
 PACING: {pacing}
+RECENT STORY MEMORY (avoid the same plot or twist): {json.dumps(topic.get("story_memory", []), ensure_ascii=False)}
 
 RULES (non-negotiable):
 - Invent a distinct protagonist, setting, central mystery, clue progression and resolution; avoid familiar stock twists unless transformed into a genuinely different mechanism.
@@ -123,13 +129,14 @@ RULES (non-negotiable):
 - Write 5 DIFFERENT hooks (each 9-24 words, speak to 'you' or raise a question the viewer cannot close). Formulas to draw on: {formulas}.
 - For Shorts, loop_line must set up the first hook. For long-form, loop_line is a short final unsettling callback rather than a forced loop. closing_line is one short sentence.
 - visual_query for each scene: 2-6 concrete English words describing the exact key SCENERY or OBJECT in the narration. Prefer specific, visually distinct shots (cracked station clock, rain-soaked ticket window, rusted railway signal). Maintain location, weather and time-of-day continuity. Alternate establishing shots, detail shots and reveal shots; never people, faces, bodies or hands. Do not reuse identical queries.
+- continuity: describe fictional adult protagonist clothing, face, recurring setting and color palette in English, in one concise paragraph. visual_prompt: a detailed English cinematic shot description, camera angle, lighting, action and consistent fictional adult characters if appropriate. This is for generated stills only; keep stock visual_query person-free. Avoid explicit violence.
 - Keep every sentence speakable aloud. No stage directions, no emoji, no hashtags in narration.
 - title_ideas: 6 titles under 60 characters, front-load the subject, include a number or a name when natural. thumbnail_text: 3 options of at most 3 words that do NOT repeat the title's words.
 - tags: 10 short search phrases people actually type.
 
 Return ONLY this JSON:
-{{"logline": "...", "title_ideas": ["..."], "thumbnail_text": ["..."], "hooks": ["..."],
- "scenes": [{{"narration": "...", "visual_query": "...", "mood": "dread"}}],
+{{"continuity": "...", "logline": "...", "title_ideas": ["..."], "thumbnail_text": ["..."], "hooks": ["..."],
+ "scenes": [{{"narration": "...", "visual_query": "...", "visual_prompt": "...", "mood": "dread"}}],
  "closing_line": "...", "loop_line": "...", "tags": ["..."], "content_notes": {{"fiction": true, "gore_level": "none"}}}}"""
 
 
