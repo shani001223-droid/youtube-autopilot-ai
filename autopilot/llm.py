@@ -8,6 +8,9 @@ BASE = "https://generativelanguage.googleapis.com/v1beta"
 class GeminiError(Exception):
     pass
 
+class GeminiUnavailable(GeminiError):
+    pass
+
 
 def extract_json(text):
     t = text.strip()
@@ -26,7 +29,8 @@ def extract_json(text):
 
 class GeminiClient:
     def __init__(self, api_key, models, session=None, sleep=time.sleep, max_retries=3, temperature=1.0, timeout=180):
-        self.key, self.models, self.sess = api_key, list(models), session or requests.Session()
+        self.key, self.models, self.sess = api_key.strip(), list(dict.fromkeys(models)), session or requests.Session()
+        self.daily_exhausted = set()
         self.sleep, self.max_retries, self.temperature, self.timeout = sleep, max_retries, temperature, timeout
 
     def generate_text(self, prompt, system=None, json_mode=False):
@@ -35,6 +39,9 @@ class GeminiClient:
         if json_mode: payload["generationConfig"]["responseMimeType"] = "application/json"
         errors = []
         for model in self.models:
+            if model in self.daily_exhausted:
+                errors.append(f"{model}: HTTP 429 daily quota used up (cached for this run)")
+                continue
             for attempt in range(self.max_retries):
                 last_attempt = attempt + 1 >= self.max_retries
                 try:
@@ -51,18 +58,29 @@ class GeminiClient:
                     continue
                 code = r.status_code
                 if code == 200:
-                    body = r.json()
+                    try:
+                        body = r.json()
+                    except ValueError:
+                        errors.append(f"{model}: invalid response JSON"); break
+                    if not isinstance(body, dict):
+                        errors.append(f"{model}: unexpected response shape"); break
                     if body.get("promptFeedback", {}).get("blockReason"):
                         raise GeminiError(f"prompt blocked: {body['promptFeedback']['blockReason']}")
                     parts = (body.get("candidates") or [{}])[0].get("content", {}).get("parts", [])
                     text = "".join(p.get("text", "") for p in parts if not p.get("thought"))
-                    if text.strip(): return text
+                    if text.strip():
+                        if json_mode:
+                            try: extract_json(text)
+                            except ValueError:
+                                errors.append(f"{model}: invalid generated JSON"); break
+                        return text
                     errors.append(f"{model}: empty response"); break
                 if code == 404:
                     errors.append(f"{model}: HTTP 404 model not found"); break
                 if code == 429:
                     raw = r.text.lower()
                     if "perday" in raw or "per day" in raw:
+                        self.daily_exhausted.add(model)
                         errors.append(f"{model}: HTTP 429 daily quota used up"); break
                     reason = "HTTP 429 rate limit or quota"
                     delay = min(60, 15 * 2 ** attempt)
@@ -79,7 +97,7 @@ class GeminiClient:
                     errors.append(f"{model}: {reason}; retries exhausted")
                     break
                 self.sleep(delay)
-        raise GeminiError("all Gemini models failed: " + "; ".join(errors))
+        raise GeminiUnavailable("all Gemini models failed: " + "; ".join(errors))
 
     def generate_json(self, prompt, system=None):
         try: return extract_json(self.generate_text(prompt, system, json_mode=True))

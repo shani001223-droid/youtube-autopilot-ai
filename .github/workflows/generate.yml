@@ -22,6 +22,8 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main # get current state after acquiring the concurrency lock
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -34,8 +36,8 @@ jobs:
         run: |
           pip install -r requirements.txt
           if [ "$DEMO" != "true" ]; then pip install -r requirements-voice.txt; fi
-      - name: Visual regression tests
-        run: python -m unittest tests.test_visual_sources -v
+      - name: Recovery and visual regression tests
+        run: python -m unittest tests.test_llm tests.test_recovery tests.test_visual_sources -v
       - name: Cache Piper voices
         uses: actions/cache@v4
         with:
@@ -61,7 +63,12 @@ jobs:
           ITEM_ID: ${{ steps.gen.outputs.ITEM_ID }}
         run: |
           TAG="preview-$ITEM_ID"
-          gh release create "$TAG" "out/$ITEM_ID/video.mp4" "out/$ITEM_ID/thumb.jpg" --title "Preview $ITEM_ID" --notes "Review copy for the dashboard. Deleted when you approve, reject or mark it posted." --prerelease
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "out/$ITEM_ID/video.mp4" "out/$ITEM_ID/thumb.jpg" --clobber
+          else
+            gh release create "$TAG" "out/$ITEM_ID/video.mp4" "out/$ITEM_ID/thumb.jpg" --title "Preview $ITEM_ID" --notes "Review copy for the dashboard." --prerelease
+          fi
+          gh release view "$TAG" --json assets --jq '.assets[] | select(.name == "video.mp4" and .size > 0) | .name' | grep -qx video.mp4
           BASE="https://github.com/${{ github.repository }}/releases/download/$TAG"
           python -m autopilot set-preview --id "$ITEM_ID" --url "$BASE/video.mp4" --thumb-url "$BASE/thumb.jpg"
       - name: Save state
