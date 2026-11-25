@@ -59,6 +59,16 @@ def select_clips(pexels, queries, durations, workdir, used_ids=None, log=lambda 
                 if chosen: break
         if not chosen:
             out.append({"path": None, "video_id": None, "credit": None}); continue
-        v, f = chosen; dest = workdir / f"clip_{i}.mp4"; pexels.download(f["link"], dest); used.add(v["id"])
+        v, f = chosen; dest = workdir / f"clip_{i}.mp4"
+        try:
+            pexels.download(f["link"], dest)
+            if not dest.is_file() or dest.stat().st_size == 0:
+                raise ValueError("empty footage")
+        except Exception as ex:
+            dest.unlink(missing_ok=True)
+            log("warning", f"Footage download failed ({type(ex).__name__}); using generated visual for scene {i + 1}")
+            out.append({"path": None, "video_id": None, "credit": None})
+            continue
+        used.add(v["id"])
         out.append({"path": str(dest), "video_id": v["id"], "credit": attribution(v)})
     return out
