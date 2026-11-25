@@ -103,5 +103,19 @@
   "stage": "research",
   "message": "GeminiError: all Gemini models failed: gemini-flash-lite-latest: retries exhausted; gemini-flash-latest: retries exhausted",
   "run": "20261125121152"
+ },
+ {
+  "t": "2026-11-25T12:25:47Z",
+  "level": "info",
+  "stage": "research",
+  "message": "topic 'The Weather Station' | cosmic unease | one phone call, in real time | 0 trend titles",
+  "run": "20261125122538"
+ },
+ {
+  "t": "2026-11-25T12:26:14Z",
+  "level": "error",
+  "stage": "script",
+  "message": "GeminiError: all Gemini models failed: gemini-flash-lite-latest: retries exhausted; gemini-flash-latest: retries exhausted",
+  "run": "20261125122538"
  }
 ]
