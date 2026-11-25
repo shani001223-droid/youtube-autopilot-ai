@@ -7,6 +7,7 @@ from typing import Any, Callable
 
 from . import config, demo, footage, music, qa, render, research, safety, scriptgen, seo, subtitles, thumbnail, tts, youtube
 from .state import redact
+from . import production
 from .llm import GeminiUnavailable
 from .reserve import reserve_story
 
@@ -24,6 +25,9 @@ class Deps:
     rng: random.Random
     now: datetime
     runner: Callable = field(default=subprocess.run)
+    media: Any = None
+    image_model: str = ""
+    image_budget: int = 0
 
 
 def demo_deps(seed=1, now=None):
@@ -46,7 +50,7 @@ def run_generate(settings, store, deps, workdir, run_id=None, demo=False):
     item = store.add_item({"status": "generating", "mode": "long" if long else "short", "profile": profile, "language": settings["niche"]["language"], "run_id": run_id, "demo": bool(demo)}); iid = item["id"]; stage = "research"
     try:
         history = [i for i in store.items() if i["id"] != iid and i.get("variety")]
-        recent = [i["topic"] for i in history if i.get("topic")]; insights = store.read_json("insights.json", {})
+        recent = [i["topic"] for i in history if i.get("topic") and not i.get("demo")]; insights = store.read_json("insights.json", {}) if profile == "legacy" else {}
         variety = scriptgen.pick_variety(settings, history, insights, deps.rng); trends = []
         if deps.yt:
             try: trends = research.trend_titles(deps.yt, settings, deps.now)
@@ -56,6 +60,7 @@ def run_generate(settings, store, deps, workdir, run_id=None, demo=False):
             topic = research.pick_topic(deps.llm, settings, recent, trends, insights, variety, deps.rng)
             log("info", "research", f"topic '{topic['topic']}' | {variety['subgenre']} | {variety['structure']} | {len(trends)} trend titles")
             stage = "script"
+            topic["story_memory"] = production.story_memory(history)
             script = scriptgen.generate_script(deps.llm, settings, topic, variety)
         except GeminiUnavailable as ex:
             if demo: raise
@@ -77,12 +82,16 @@ def run_generate(settings, store, deps, workdir, run_id=None, demo=False):
         clips = footage.select_clips(deps.pexels, queries, durations, out / "clips", log=lambda l, m: log(l, "footage", m)) if deps.pexels \
             else [{"path": None, "video_id": None, "credit": None} for _ in queries]
         if not demo:
+            if deps.media and deps.image_model and deps.image_budget:
+                from .cinematic_media import generate_visuals
+                images = generate_visuals(deps.media, deps.image_model, script, queries, out / "ai", long=long, max_calls=deps.image_budget, log=lambda l,m: log(l,"footage",m))
+                clips = [image if image.get("path") else clip for image,clip in zip(images, clips)]
             from .commons_media import fill_missing
             if not deps.pexels:
                 log("warning", "footage", "PEXELS_API_KEY missing; using keyless licensed media search")
             clips = fill_missing(clips, queries, out / "clips", log=lambda l,m: log(l,"footage",m))
         got = sum(1 for c in clips if c.get("kind") in ("stock_video", "commons_video") or (c.get("path") and not c.get("kind")))
-        photos = sum(1 for c in clips if c.get("kind") == "commons_photo")
+        photos = sum(1 for c in clips if c.get("kind") in ("commons_photo", "ai_image"))
         log("info", "footage", f"{got}/{len(clips)} moving stock clips; {photos} animated licensed photos; {len(clips)-got-photos} original illustrated scenes")
 
         stage = "render"; mus = out / "music.wav"; music.make_ambient(sum(durations) + 1, mus, variety["music_mood"], deps.rng.randint(0, 99), runner=deps.runner)
@@ -105,14 +114,15 @@ def run_generate(settings, store, deps, workdir, run_id=None, demo=False):
         log("info", "thumbnail", f"title score {choice['score']}; thumbnail text '{choice['thumb_text']}'")
 
         stage = "seo"; credits = [c["credit"] for c in clips if c["credit"]]
-        desc = seo.build_description(script, choice["title"], credits, settings); tags = seo.clean_tags(script["tags"] + [variety["subgenre"], "horror story" if long else "short story"])
+        chapter_list = production.chapters(durations) if long else None
+        desc = seo.build_description(script, choice["title"], credits, settings, chapters=chapter_list); tags = seo.clean_tags(script["tags"] + [variety["subgenre"], "horror story" if long else "short story"])
         missing = seo.query_test(choice["title"], desc, [f"{variety['subgenre']} story", topic["topic"]])
         log("info", "seo", f"{len(tags)} tags; description {len(desc)} chars" + (f"; uncovered queries: {missing}" if missing else ""))
 
         return store.update(iid, status="awaiting_approval", topic=topic["topic"], premise=topic.get("premise"), variety=variety, title=choice["title"],
                             thumb_text=choice["thumb_text"], title_issues=choice["issues"], description=desc, tags=tags, hook=hook["hook"], hook_score=hook["score"],
                             hook_formula=hook["formula"], script={"scenes": script["scenes"], "closing_line": script["closing_line"], "loop_line": script["loop_line"]},
-                            credits=credits, video_info=info, visual_sources=[c.get("kind", "stock_video" if c.get("path") else "illustration") for c in clips], qa={"ok": qa_ok, "gap_seconds": dead["gap_seconds"]}, files={"video": str(video), "thumb": str(thumb)},
+                            credits=credits, video_info=info, visual_sources=[c.get("kind", "stock_video" if c.get("path") else "illustration") for c in clips], qa={"ok": qa_ok, "gap_seconds": dead["gap_seconds"], "visual": production.visual_report(clips, queries)}, files={"video": str(video), "thumb": str(thumb)},
                             preview_url=None, error=None, script_source=source)
     except Exception as ex:
         msg = redact(f"{type(ex).__name__}: {ex}"); log("error", stage, msg)
