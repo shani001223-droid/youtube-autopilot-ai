@@ -51,9 +51,13 @@ class YouTubeClient:
         if r.status_code >= 400: raise YouTubeError(f"{what} failed: HTTP {r.status_code}: {r.text[:200]}")
         return r
 
-    def search_recent(self, query, published_after, max_results=10):
-        r = self._ok(self._req("GET", f"{API}/search", params={"part": "snippet", "type": "video", "order": "viewCount", "videoDuration": "short",
-                     "publishedAfter": published_after, "q": query, "maxResults": max_results, "relevanceLanguage": "en"}), "search")
+    def channel_ids(self):
+        r = self._ok(self._req("GET", f"{API}/channels", params={"part": "id", "mine": "true"}), "channel identity")
+        return {i["id"] for i in r.json().get("items", [])}
+
+    def search_recent(self, query, published_after, max_results=10, language="en", duration="short"):
+        r = self._ok(self._req("GET", f"{API}/search", params={"part": "snippet", "type": "video", "order": "viewCount", "videoDuration": duration,
+                     "publishedAfter": published_after, "q": query, "maxResults": max_results, "relevanceLanguage": language}), "search")
         return [{"id": i["id"]["videoId"], "title": i["snippet"]["title"], "channel": i["snippet"]["channelTitle"], "channel_id": i["snippet"]["channelId"],
                  "published": i["snippet"]["publishedAt"]} for i in r.json().get("items", [])]
 
