@@ -117,5 +117,12 @@
   "stage": "script",
   "message": "GeminiError: all Gemini models failed: gemini-flash-lite-latest: retries exhausted; gemini-flash-latest: retries exhausted",
   "run": "20261125122538"
+ },
+ {
+  "t": "2026-11-25T12:29:13Z",
+  "level": "error",
+  "stage": "research",
+  "message": "ReadTimeout: HTTPSConnectionPool(host='generativelanguage.googleapis.com', port=443): Read timed out. (read timeout=90)",
+  "run": "20261125122731"
  }
 ]
