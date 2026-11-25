@@ -20,6 +20,18 @@ def _yt(env):
     return YouTubeClient(env["YT_CLIENT_ID"], env["YT_CLIENT_SECRET"], env["YT_REFRESH_TOKEN"]) if all(env.get(k) for k in SECRETS[2:]) else None
 
 
+def _profile_yt(env, profile):
+    if profile == "legacy": return _yt(env)
+    from .youtube import YouTubeClient
+    prefix = {"hindi_shorts": "YT_HINDI_", "english_long": "YT_ENGLISH_"}[profile]
+    keys = [prefix + suffix for suffix in ("CLIENT_ID", "CLIENT_SECRET", "REFRESH_TOKEN", "CHANNEL_ID")]
+    if not all(env.get(k) for k in keys): return None
+    client = YouTubeClient(*(env[k] for k in keys[:3]))
+    if client.channel_ids() != {env[keys[3]]}:
+        raise RuntimeError("Channel OAuth identity mismatch; analytics blocked")
+    return client
+
+
 def _out(**kv):
     for k, v in kv.items():
         print(f"{k}={v}")
@@ -34,7 +46,8 @@ def main(argv=None, env=None):
     p = sub.add_parser("publish"); p.add_argument("--id", required=True); p.add_argument("--action", required=True); p.add_argument("--video-url"); p.add_argument("--workdir", default="out")
     s = sub.add_parser("settings-action"); s.add_argument("--action", required=True, choices=["approve_sample", "enable_public", "disable_public"]); s.add_argument("--id")
     r = sub.add_parser("set-preview"); r.add_argument("--id", required=True); r.add_argument("--url", required=True); r.add_argument("--thumb-url")
-    for name in ("analytics", "comments", "plan", "doctor", "validate-settings"): sub.add_parser(name)
+    for name in ("comments", "plan", "doctor", "validate-settings"): sub.add_parser(name)
+    report = sub.add_parser("analytics"); report.add_argument("--profile", choices=["legacy", "hindi_shorts", "english_long"], default="legacy")
     a = ap.parse_args(argv); sp = os.path.join(a.data, "settings.json"); settings = config.load_settings(sp); store = Store(a.data)
 
     if a.cmd == "generate":
@@ -83,18 +96,21 @@ def main(argv=None, env=None):
         config.save_settings(new, sp); return 0
     if a.cmd == "set-preview": store.update(a.id, preview_url=a.url, thumb_url=a.thumb_url); return 0
     if a.cmd == "plan": store.write_json("plan.json", scheduler.weekly_plan(settings, date.today() - timedelta(days=date.today().weekday()))); return 0
-    yt = _yt(env)
+    profile = a.profile if a.cmd == "analytics" else "legacy"
+    yt = _profile_yt(env, profile)
     if yt is None: print("YouTube secrets missing: " + ", ".join(SECRETS[2:]), file=sys.stderr); return 2
     if a.cmd == "analytics":
-        today = now.strftime("%Y-%m-%d"); recs = an.collect(yt, store.items(), today); ret = {}
+        today = now.strftime("%Y-%m-%d"); items = [i for i in store.items() if i.get("profile", "legacy") == profile]; recs = an.collect(yt, items, today); ret = {}
+        lengths = {i.get("video_id"): int((i.get("video_info") or {}).get("duration", 45)) for i in items if i.get("video_id")}
+        suffix = "" if profile == "legacy" else "_" + profile
         for rec in recs[-3:]:
-            try: ret[rec["video_id"]] = an.retention_report(yt.retention(rec["video_id"], (rec.get("published_at") or today)[:10], today), 45)
+            try: ret[rec["video_id"]] = an.retention_report(yt.retention(rec["video_id"], (rec.get("published_at") or today)[:10], today), lengths.get(rec["video_id"], 45))
             except Exception as ex: ret[rec["video_id"]] = {"ok": False, "error": str(ex)[:200]}
-        store.write_json("analytics.json", {"updated": now.isoformat(), "records": recs, "retention": ret})
-        store.write_json("insights.json", improve.build_insights(recs)); store.write_json("audit.json", audit.audit_channel(recs)); return 0
+        store.write_json(f"analytics{suffix}.json", {"updated": now.isoformat(), "records": recs, "retention": ret})
+        store.write_json(f"insights{suffix}.json", improve.build_insights(recs)); store.write_json(f"audit{suffix}.json", audit.audit_channel(recs)); return 0
     if a.cmd == "comments":
         from .llm import GeminiClient
-        vids = [i for i in store.items() if i.get("video_id")][-3:]; cs = [c for v in vids for c in yt.recent_comments(v["video_id"], 30)]; piles = comments.triage(cs)
+        vids = [i for i in store.items() if i.get("video_id") and i.get("profile", "legacy") == "legacy"][-3:]; cs = [c for v in vids for c in yt.recent_comments(v["video_id"], 30)]; piles = comments.triage(cs)
         todo = piles["questions"] + piles["corrections"] + piles["praise"]
         out = GeminiClient(env["GEMINI_API_KEY"], settings["gemini"]["models"]).generate_json(comments.draft_prompt(todo[:15], settings["niche"])) if todo and env.get("GEMINI_API_KEY") else {"replies": []}
         store.write_json("replies.json", {"updated": now.isoformat(), "piles": {k: len(v) for k, v in piles.items()}, "drafts": out.get("replies", []), "source": todo[:15]}); return 0
