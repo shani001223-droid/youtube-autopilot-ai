@@ -9,5 +9,32 @@
   "safety": {
     "sample_approved": false,
     "public_publishing_enabled": false
+  },
+  "niche": {
+    "name": "Original English Horror & Mystery Stories",
+    "tone": "slow-burn dread, concrete sensory detail, a quiet twist, no gore",
+    "audience": "adults 18-45 who like short scary stories",
+    "subgenres": [
+      "supernatural",
+      "haunted places",
+      "folk horror",
+      "psychological",
+      "urban mystery",
+      "cosmic unease",
+      "found-document mystery",
+      "small-town secrets"
+    ],
+    "banned_topics": [],
+    "seed_queries": [
+      "scary story",
+      "horror story short",
+      "creepy mystery story"
+    ]
+  },
+  "content": {
+    "short_target_seconds": 45
+  },
+  "voice": {
+    "model": "en_US-john-medium"
   }
 }
