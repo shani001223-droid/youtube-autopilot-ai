@@ -201,5 +201,12 @@
   "stage": "research",
   "message": "GeminiError: all Gemini models failed: gemini-flash-lite-latest: HTTP 503 temporary server error; retries exhausted; gemini-flash-latest: HTTP 429 daily quota used up",
   "run": "20261125130210"
+ },
+ {
+  "t": "2026-11-25T13:07:55Z",
+  "level": "error",
+  "stage": "research",
+  "message": "GeminiError: all Gemini models failed: gemini-flash-lite-latest: HTTP 503 temporary server error; retries exhausted; gemini-flash-latest: HTTP 429 daily quota used up",
+  "run": "20261125130654"
  }
 ]
