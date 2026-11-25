@@ -457,5 +457,104 @@
   "error": null,
   "script_source": "original_reserve",
   "thumb_url": "https://github.com/shani001223-droid/youtube-autopilot-ai/releases/download/preview-20261125-143902-3957/thumb.jpg"
+ },
+ {
+  "status": "awaiting_approval",
+  "mode": "short",
+  "run_id": "20261125152018",
+  "demo": false,
+  "id": "20261125-152018-e935",
+  "created_at": "2026-11-25T15:20:18Z",
+  "topic": "The Lighthouse Without a Coast",
+  "premise": "A light appears in a field where no lighthouse exists.",
+  "variety": {
+   "subgenre": "urban mystery",
+   "structure": "countdown to something arriving",
+   "visual_style": "abandoned interiors",
+   "music_mood": "hollow"
+  },
+  "title": "The Lighthouse Without a Coast",
+  "thumb_text": "NOT POSSIBLE",
+  "title_issues": [
+   [
+    "no-number",
+    "no number, date or name - the most reliable single fix"
+   ]
+  ],
+  "description": "A light appears in a field where no lighthouse exists.\nA new original original english horror & mystery stories - subscribe so you never miss the next one.\n\nThis is a work of fiction. The story and narration are AI-assisted; every name and event is invented.\n\nFootage:\nEFTA00001268 - View into a long empty hallway through an open doorway with light-colored walls and a dark floo — Federal Bureau of Investigation, Public domain; https://commons.wikimedia.org/wiki/File:EFTA00001268_-_View_into_a_long_empty_hallway_through_an_open_doorway_with_light-colored_walls_and_a_dark_floor.jpg  (cropped, color graded, animated)\nEars of wheat at dusk (Unsplash).jpg — Cezanne Ali cezanne_ali, CC0; https://commons.wikimedia.org/wiki/File:Ears_of_wheat_at_dusk_(Unsplash).jpg http://creativecommons.org/publicdomain/zero/1.0/deed.en (cropped, color graded, animated)\nOvergrown interior of an abandoned house on Margarita Island, Venezuela.jpg — Wilfredor, CC0; https://commons.wikimedia.org/wiki/File:Overgrown_interior_of_an_abandoned_house_on_Margarita_Island,_Venezuela.jpg http://creativecommons.org/publicdomain/zero/1.0/deed.en (cropped, color graded, animated)\nSundial Compass (China), possibly 18th century (CH 18416835).jpg — Unknown artistUnknown artist, Public domain; https://commons.wikimedia.org/wiki/File:Sundial_Compass_(China),_possibly_18th_century_(CH_18416835).jpg  (cropped, color graded, animated)\n\nMusic: generated for this channel.\n\n#horrorstories #shorts #mystery",
+  "tags": [
+   "original horror",
+   "short mystery",
+   "creepy fiction",
+   "scary story",
+   "urban mystery",
+   "short story"
+  ],
+  "hook": "What would you do if the ordinary world suddenly stopped obeying its own rules?",
+  "hook_score": 44,
+  "hook_formula": "The Question",
+  "script": {
+   "scenes": [
+    {
+     "narration": "A white beam swept across the wheat every night, always at exactly the same moment.",
+     "visual_query": "wheat field dusk",
+     "mood": "dread"
+    },
+    {
+     "narration": "There was no tower nearby, only a rusted gate and a road that ended at the field.",
+     "visual_query": "rusted gate",
+     "mood": "dread"
+    },
+    {
+     "narration": "I followed the light and discovered a brass compass hanging from a wooden post.",
+     "visual_query": "old brass compass",
+     "mood": "dread"
+    },
+    {
+     "narration": "The needle pointed straight down. From below the soil came the soft rhythm of distant waves.",
+     "visual_query": "sea waves night",
+     "mood": "dread"
+    },
+    {
+     "narration": "The beam stopped over my house. Saltwater began gathering inside the windows, though the glass was dry.",
+     "visual_query": "dark house window",
+     "mood": "dread"
+    }
+   ],
+   "closing_line": "Something is guiding the sea inland.",
+   "loop_line": "Watch where the light points next."
+  },
+  "credits": [
+   "Ears of wheat at dusk (Unsplash).jpg — Cezanne Ali cezanne_ali, CC0; https://commons.wikimedia.org/wiki/File:Ears_of_wheat_at_dusk_(Unsplash).jpg http://creativecommons.org/publicdomain/zero/1.0/deed.en (cropped, color graded, animated)",
+   "EFTA00001268 - View into a long empty hallway through an open doorway with light-colored walls and a dark floo — Federal Bureau of Investigation, Public domain; https://commons.wikimedia.org/wiki/File:EFTA00001268_-_View_into_a_long_empty_hallway_through_an_open_doorway_with_light-colored_walls_and_a_dark_floor.jpg  (cropped, color graded, animated)",
+   "Sundial Compass (China), possibly 18th century (CH 18416835).jpg — Unknown artistUnknown artist, Public domain; https://commons.wikimedia.org/wiki/File:Sundial_Compass_(China),_possibly_18th_century_(CH_18416835).jpg  (cropped, color graded, animated)",
+   "Overgrown interior of an abandoned house on Margarita Island, Venezuela.jpg — Wilfredor, CC0; https://commons.wikimedia.org/wiki/File:Overgrown_interior_of_an_abandoned_house_on_Margarita_Island,_Venezuela.jpg http://creativecommons.org/publicdomain/zero/1.0/deed.en (cropped, color graded, animated)"
+  ],
+  "video_info": {
+   "width": 1080,
+   "height": 1920,
+   "duration": 44.524,
+   "has_video": true,
+   "has_audio": true
+  },
+  "visual_sources": [
+   "commons_photo",
+   "commons_photo",
+   "commons_photo",
+   "commons_photo",
+   "illustration"
+  ],
+  "qa": {
+   "ok": true,
+   "gap_seconds": 0.0
+  },
+  "files": {
+   "video": "out/20261125-152018-e935/video.mp4",
+   "thumb": "out/20261125-152018-e935/thumb.jpg"
+  },
+  "preview_url": "https://github.com/shani001223-droid/youtube-autopilot-ai/releases/download/preview-20261125-152018-e935/video.mp4",
+  "error": null,
+  "script_source": "original_reserve",
+  "thumb_url": "https://github.com/shani001223-droid/youtube-autopilot-ai/releases/download/preview-20261125-152018-e935/thumb.jpg"
  }
 ]
