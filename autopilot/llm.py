@@ -25,7 +25,7 @@ def extract_json(text):
 
 
 class GeminiClient:
-    def __init__(self, api_key, models, session=None, sleep=time.sleep, max_retries=3, temperature=1.0, timeout=90):
+    def __init__(self, api_key, models, session=None, sleep=time.sleep, max_retries=3, temperature=1.0, timeout=180):
         self.key, self.models, self.sess = api_key, list(models), session or requests.Session()
         self.sleep, self.max_retries, self.temperature, self.timeout = sleep, max_retries, temperature, timeout
 
@@ -36,25 +36,49 @@ class GeminiClient:
         errors = []
         for model in self.models:
             for attempt in range(self.max_retries):
-                r = self.sess.post(f"{BASE}/models/{model}:generateContent", headers={"x-goog-api-key": self.key, "Content-Type": "application/json"},
-                                   json=payload, timeout=self.timeout)
+                last_attempt = attempt + 1 >= self.max_retries
+                try:
+                    r = self.sess.post(
+                        f"{BASE}/models/{model}:generateContent",
+                        headers={"x-goog-api-key": self.key, "Content-Type": "application/json"},
+                        json=payload, timeout=(15, self.timeout))
+                except (requests.Timeout, requests.ConnectionError) as ex:
+                    reason = f"{type(ex).__name__} (read timeout {self.timeout}s)"
+                    if last_attempt:
+                        errors.append(f"{model}: {reason}; retries exhausted")
+                        break
+                    self.sleep(min(30, 5 * 2 ** attempt))
+                    continue
                 code = r.status_code
                 if code == 200:
                     body = r.json()
                     if body.get("promptFeedback", {}).get("blockReason"):
                         raise GeminiError(f"prompt blocked: {body['promptFeedback']['blockReason']}")
                     parts = (body.get("candidates") or [{}])[0].get("content", {}).get("parts", [])
-                    text = "".join(p.get("text", "") for p in parts)
+                    text = "".join(p.get("text", "") for p in parts if not p.get("thought"))
                     if text.strip(): return text
                     errors.append(f"{model}: empty response"); break
+                if code == 404:
+                    errors.append(f"{model}: HTTP 404 model not found"); break
                 if code == 429:
-                    if "PerDay" in r.text or "per day" in r.text.lower(): errors.append(f"{model}: daily quota used up"); break
-                    self.sleep(min(60, 5 * 2 ** attempt)); continue
-                if code == 404: errors.append(f"{model}: model not found"); break
-                if code >= 500: self.sleep(2 ** attempt); continue
-                raise GeminiError(f"HTTP {code} from Gemini (check GEMINI_API_KEY and model names)")
-            else:
-                errors.append(f"{model}: retries exhausted")
+                    raw = r.text.lower()
+                    if "perday" in raw or "per day" in raw:
+                        errors.append(f"{model}: HTTP 429 daily quota used up"); break
+                    reason = "HTTP 429 rate limit or quota"
+                    delay = min(60, 15 * 2 ** attempt)
+                    try:
+                        delay = max(delay, min(90, float(r.headers.get("Retry-After", 0))))
+                    except (ValueError, TypeError):
+                        pass
+                elif code >= 500 or code == 408:
+                    reason = f"HTTP {code} temporary server error"
+                    delay = min(30, 5 * 2 ** attempt)
+                else:
+                    raise GeminiError(f"{model}: HTTP {code} from Gemini (check GEMINI_API_KEY and project access)")
+                if last_attempt:
+                    errors.append(f"{model}: {reason}; retries exhausted")
+                    break
+                self.sleep(delay)
         raise GeminiError("all Gemini models failed: " + "; ".join(errors))
 
     def generate_json(self, prompt, system=None):
