@@ -411,5 +411,12 @@
   "stage": "seo",
   "message": "6 tags; description 1850 chars; uncovered queries: ['cosmic unease story']",
   "run": "20261125143902"
+ },
+ {
+  "t": "2026-11-25T14:41:03Z",
+  "level": "info",
+  "stage": "gate",
+  "message": "sample approved: 20261125-133116-f8f2",
+  "run": null
  }
 ]
