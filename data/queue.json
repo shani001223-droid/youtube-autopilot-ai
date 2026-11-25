@@ -357,5 +357,105 @@
    "will_be_public": false,
    "reason": "manual mode: nothing is sent to YouTube; upload by hand from the YouTube app"
   }
+ },
+ {
+  "status": "awaiting_approval",
+  "mode": "short",
+  "run_id": "20261125143902",
+  "demo": false,
+  "id": "20261125-143902-3957",
+  "created_at": "2026-11-25T14:39:02Z",
+  "topic": "The Lake That Reflected Tomorrow",
+  "premise": "A still lake reflects a day that has not arrived.",
+  "variety": {
+   "subgenre": "cosmic unease",
+   "structure": "found recording transcript",
+   "visual_style": "abandoned interiors",
+   "music_mood": "dread"
+  },
+  "title": "The Lake That Reflected Tomorrow",
+  "thumb_text": "NOT POSSIBLE",
+  "title_issues": [
+   [
+    "no-number",
+    "no number, date or name - the most reliable single fix"
+   ]
+  ],
+  "description": "A still lake reflects a day that has not arrived.\nA new original original english horror & mystery stories - subscribe so you never miss the next one.\n\nThis is a work of fiction. The story and narration are AI-assisted; every name and event is invented.\n\nFootage:\nCincinnati - Spring Grove Cemetery & Arboretum \"Autumn Reflection\" (4032632957).jpg — David Ohmer from Cincinnati, USA, CC BY 2.0; https://commons.wikimedia.org/wiki/File:Cincinnati_-_Spring_Grove_Cemetery_%26_Arboretum_%22Autumn_Reflection%22_(4032632957).jpg https://creativecommons.org/licenses/by/2.0 (cropped, color graded, animated)\nForty Years of Change in Louisiana’s Wetlands (154302 - 9 tm5 oli oli2 2024 ani).webm — NASA Earth Observatory animations by Ross Walter, using Landsat data from the U.S. Geological Survey, Public domain; https://commons.wikimedia.org/wiki/File:Forty_Years_of_Change_in_Louisiana%E2%80%99s_Wetlands_(154302_-_9_tm5_oli_oli2_2024_ani).webm  (cropped, color graded)\nRaindrops against the window in the night city, Las Palmas.webm — slavikfi (Vjatseslav Robtsenkov), CC0; https://commons.wikimedia.org/wiki/File:Raindrops_against_the_window_in_the_night_city,_Las_Palmas.webm http://creativecommons.org/publicdomain/zero/1.0/deed.en (cropped, color graded)\nSun lantern in misty willows.jpg — W.carter, Public domain; https://commons.wikimedia.org/wiki/File:Sun_lantern_in_misty_willows.jpg  (cropped, color graded, animated)\nWooden Bench - Fountain City Lake Public Park & Duck Pond - Knoxville, Tennessee - October 25, 2014.jpg — David Ratledge, CC BY 4.0; https://commons.wikimedia.org/wiki/File:Wooden_Bench_-_Fountain_City_Lake_Public_Park_%26_Duck_Pond_-_Knoxville,_Tennessee_-_October_25,_2014.jpg https://creativecommons.org/licenses/by/4.0 (cropped, color graded, animated)\n\nMusic: generated for this channel.\n\n#horrorstories #shorts #mystery",
+  "tags": [
+   "original horror",
+   "short mystery",
+   "creepy fiction",
+   "scary story",
+   "cosmic unease",
+   "short story"
+  ],
+  "hook": "What would you do if the ordinary world suddenly stopped obeying its own rules?",
+  "hook_score": 44,
+  "hook_formula": "The Question",
+  "script": {
+   "scenes": [
+    {
+     "narration": "The lake reflected a red autumn forest, even though every tree around it was green.",
+     "visual_query": "still forest lake",
+     "mood": "dread"
+    },
+    {
+     "narration": "I put a stone on the bank. In the reflection, the stone was already lying beneath the water.",
+     "visual_query": "autumn trees reflection",
+     "mood": "dread"
+    },
+    {
+     "narration": "The following morning I returned. The leaves had changed, but only along the water's edge.",
+     "visual_query": "stone shoreline",
+     "mood": "dread"
+    },
+    {
+     "narration": "A wooden bench stood on the far shore. Its reflection was empty except for a small lantern.",
+     "visual_query": "empty wooden bench",
+     "mood": "dread"
+    },
+    {
+     "narration": "I backed away as the reflected lantern brightened. Behind me, the real path vanished into mist.",
+     "visual_query": "lantern fog",
+     "mood": "dread"
+    }
+   ],
+   "closing_line": "The lake is waiting for another morning.",
+   "loop_line": "Look twice before trusting a reflection."
+  },
+  "credits": [
+   "Forty Years of Change in Louisiana’s Wetlands (154302 - 9 tm5 oli oli2 2024 ani).webm — NASA Earth Observatory animations by Ross Walter, using Landsat data from the U.S. Geological Survey, Public domain; https://commons.wikimedia.org/wiki/File:Forty_Years_of_Change_in_Louisiana%E2%80%99s_Wetlands_(154302_-_9_tm5_oli_oli2_2024_ani).webm  (cropped, color graded)",
+   "Cincinnati - Spring Grove Cemetery & Arboretum \"Autumn Reflection\" (4032632957).jpg — David Ohmer from Cincinnati, USA, CC BY 2.0; https://commons.wikimedia.org/wiki/File:Cincinnati_-_Spring_Grove_Cemetery_%26_Arboretum_%22Autumn_Reflection%22_(4032632957).jpg https://creativecommons.org/licenses/by/2.0 (cropped, color graded, animated)",
+   "Raindrops against the window in the night city, Las Palmas.webm — slavikfi (Vjatseslav Robtsenkov), CC0; https://commons.wikimedia.org/wiki/File:Raindrops_against_the_window_in_the_night_city,_Las_Palmas.webm http://creativecommons.org/publicdomain/zero/1.0/deed.en (cropped, color graded)",
+   "Wooden Bench - Fountain City Lake Public Park & Duck Pond - Knoxville, Tennessee - October 25, 2014.jpg — David Ratledge, CC BY 4.0; https://commons.wikimedia.org/wiki/File:Wooden_Bench_-_Fountain_City_Lake_Public_Park_%26_Duck_Pond_-_Knoxville,_Tennessee_-_October_25,_2014.jpg https://creativecommons.org/licenses/by/4.0 (cropped, color graded, animated)",
+   "Sun lantern in misty willows.jpg — W.carter, Public domain; https://commons.wikimedia.org/wiki/File:Sun_lantern_in_misty_willows.jpg  (cropped, color graded, animated)"
+  ],
+  "video_info": {
+   "width": 1080,
+   "height": 1920,
+   "duration": 42.755,
+   "has_video": true,
+   "has_audio": true
+  },
+  "visual_sources": [
+   "commons_video",
+   "commons_photo",
+   "commons_video",
+   "commons_photo",
+   "commons_photo"
+  ],
+  "qa": {
+   "ok": true,
+   "gap_seconds": 0.0
+  },
+  "files": {
+   "video": "out/20261125-143902-3957/video.mp4",
+   "thumb": "out/20261125-143902-3957/thumb.jpg"
+  },
+  "preview_url": "https://github.com/shani001223-droid/youtube-autopilot-ai/releases/download/preview-20261125-143902-3957/video.mp4",
+  "error": null,
+  "script_source": "original_reserve",
+  "thumb_url": "https://github.com/shani001223-droid/youtube-autopilot-ai/releases/download/preview-20261125-143902-3957/thumb.jpg"
  }
 ]

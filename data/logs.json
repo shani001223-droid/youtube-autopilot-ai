@@ -313,5 +313,103 @@
   "stage": "publish",
   "message": "manual mode: nothing is sent to YouTube; upload by hand from the YouTube app",
   "run": "20261125-133116-f8f2"
+ },
+ {
+  "t": "2026-11-25T14:39:47Z",
+  "level": "warning",
+  "stage": "research",
+  "message": "Gemini unavailable: all Gemini models failed: gemini-flash-lite-latest: HTTP 503 temporary server error; retries exhausted; gemini-flash-latest: HTTP 503 temporary server error; retries exhausted; trying original story reserve",
+  "run": "20261125143902"
+ },
+ {
+  "t": "2026-11-25T14:39:47Z",
+  "level": "info",
+  "stage": "script",
+  "message": "Using original reserve: The Lake That Reflected Tomorrow",
+  "run": "20261125143902"
+ },
+ {
+  "t": "2026-11-25T14:39:47Z",
+  "level": "info",
+  "stage": "script",
+  "message": "5 scenes; hook score 44 (WEAK, The Question)",
+  "run": "20261125143902"
+ },
+ {
+  "t": "2026-11-25T14:39:56Z",
+  "level": "info",
+  "stage": "voice",
+  "message": "12 sentences, 42.2s narration, longest gap 0.00s",
+  "run": "20261125143902"
+ },
+ {
+  "t": "2026-11-25T14:39:56Z",
+  "level": "warning",
+  "stage": "footage",
+  "message": "PEXELS_API_KEY missing; using keyless licensed media search",
+  "run": "20261125143902"
+ },
+ {
+  "t": "2026-11-25T14:39:57Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 1: commons_video",
+  "run": "20261125143902"
+ },
+ {
+  "t": "2026-11-25T14:39:58Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 2: commons_photo",
+  "run": "20261125143902"
+ },
+ {
+  "t": "2026-11-25T14:40:00Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 3: commons_video",
+  "run": "20261125143902"
+ },
+ {
+  "t": "2026-11-25T14:40:03Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 4: commons_photo",
+  "run": "20261125143902"
+ },
+ {
+  "t": "2026-11-25T14:40:04Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 5: commons_photo",
+  "run": "20261125143902"
+ },
+ {
+  "t": "2026-11-25T14:40:04Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "2/5 moving stock clips; 3 animated licensed photos; 0 original illustrated scenes",
+  "run": "20261125143902"
+ },
+ {
+  "t": "2026-11-25T14:40:46Z",
+  "level": "info",
+  "stage": "render",
+  "message": "1080x1920 42.8s audio=True",
+  "run": "20261125143902"
+ },
+ {
+  "t": "2026-11-25T14:40:47Z",
+  "level": "info",
+  "stage": "thumbnail",
+  "message": "title score 94; thumbnail text 'NOT POSSIBLE'",
+  "run": "20261125143902"
+ },
+ {
+  "t": "2026-11-25T14:40:47Z",
+  "level": "info",
+  "stage": "seo",
+  "message": "6 tags; description 1850 chars; uncovered queries: ['cosmic unease story']",
+  "run": "20261125143902"
  }
 ]
