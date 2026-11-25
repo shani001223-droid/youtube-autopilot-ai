@@ -62,13 +62,48 @@ def synthesize_all(sentences, out_dir, synth_fn, gap=0.35):
 
 
 def piper_synth(voice, data_dir="voices", runner=subprocess.run, allow_noncommercial=False, length_scale=1.0):
-    """UNTESTED against a live Piper install (needs network to fetch the voice on first use)."""
+    """Download the model explicitly before synthesis; modern Piper does not auto-download."""
     check_voice(voice, allow_noncommercial)
+    import time
+    root = Path(data_dir).resolve()
+    model = root / f"{voice}.onnx"
+    cfg = root / f"{voice}.onnx.json"
+    ready = False
+
+    def ensure_voice():
+        nonlocal ready
+        if ready:
+            return
+        root.mkdir(parents=True, exist_ok=True)
+        def present():
+            return model.is_file() and model.stat().st_size > 0 and cfg.is_file() and cfg.stat().st_size > 0
+        if not present():
+            last = ""
+            for attempt in range(3):
+                try:
+                    result = runner([sys.executable, "-m", "piper.download_voices", "--data-dir", str(root), voice],
+                                    text=True, capture_output=True, timeout=180)
+                    if result.returncode == 0 and present():
+                        break
+                    last = (result.stderr or result.stdout or "missing voice files")[-400:]
+                except subprocess.TimeoutExpired:
+                    last = "voice download timed out"
+                if attempt < 2:
+                    time.sleep(5 * (attempt + 1))
+            if not present():
+                raise RuntimeError(f"Piper voice download failed for {voice}: {last}")
+        ready = True
 
     def synth(text, out_path):
-        cmd = [sys.executable, "-m", "piper", "--model", voice, "--data-dir", str(data_dir), "--download-dir", str(data_dir),
-               "--output_file", str(out_path)]
+        ensure_voice()
+        cmd = [sys.executable, "-m", "piper", "--model", str(model), "--config", str(cfg),
+               "--output-file", str(out_path)]
         if length_scale != 1.0: cmd += ["--length-scale", str(length_scale)]
-        r = runner(cmd, input=text, text=True, capture_output=True)
-        if r.returncode != 0: raise RuntimeError(f"piper failed: {(r.stderr or '')[-300:]}")
+        try:
+            r = runner(cmd, input=text, text=True, capture_output=True, timeout=120)
+        except subprocess.TimeoutExpired:
+            raise RuntimeError(f"Piper synthesis timed out for {voice}") from None
+        if r.returncode != 0: raise RuntimeError(f"piper failed: {(r.stderr or '')[-600:]}")
+        if not Path(out_path).is_file() or wav_duration(out_path) <= 0:
+            raise RuntimeError("Piper produced no usable narration")
     return synth
