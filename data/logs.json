@@ -754,5 +754,243 @@
   "stage": "seo",
   "message": "5 tags; description 1628 chars; uncovered queries: ['folk horror story']",
   "run": "20261125163455"
+ },
+ {
+  "t": "2026-11-25T16:37:24Z",
+  "level": "warning",
+  "stage": "research",
+  "message": "Gemini unavailable: all Gemini models failed: gemini-flash-lite-latest: HTTP 503 temporary server error; retries exhausted; gemini-flash-latest: HTTP 429 daily quota used up; trying original story reserve",
+  "run": "20261125163659"
+ },
+ {
+  "t": "2026-11-25T16:37:24Z",
+  "level": "info",
+  "stage": "script",
+  "message": "Using original reserve: The Town That Returned Lost Minutes",
+  "run": "20261125163659"
+ },
+ {
+  "t": "2026-11-25T16:37:24Z",
+  "level": "info",
+  "stage": "script",
+  "message": "25 scenes; hook score 57 (WORKABLE, The Question)",
+  "run": "20261125163659"
+ },
+ {
+  "t": "2026-11-25T16:38:28Z",
+  "level": "info",
+  "stage": "voice",
+  "message": "98 sentences, 431.4s narration, longest gap 0.00s",
+  "run": "20261125163659"
+ },
+ {
+  "t": "2026-11-25T16:38:28Z",
+  "level": "warning",
+  "stage": "footage",
+  "message": "PEXELS_API_KEY missing; using keyless licensed media search",
+  "run": "20261125163659"
+ },
+ {
+  "t": "2026-11-25T16:38:29Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 1: commons_photo",
+  "run": "20261125163659"
+ },
+ {
+  "t": "2026-11-25T16:38:30Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 2: commons_photo",
+  "run": "20261125163659"
+ },
+ {
+  "t": "2026-11-25T16:38:32Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 3: commons_video",
+  "run": "20261125163659"
+ },
+ {
+  "t": "2026-11-25T16:38:33Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 4: commons_photo",
+  "run": "20261125163659"
+ },
+ {
+  "t": "2026-11-25T16:38:34Z",
+  "level": "warning",
+  "stage": "footage",
+  "message": "Scene 5: original animated illustration (no stock available)",
+  "run": "20261125163659"
+ },
+ {
+  "t": "2026-11-25T16:38:35Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 6: commons_photo",
+  "run": "20261125163659"
+ },
+ {
+  "t": "2026-11-25T16:38:37Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 7: commons_photo",
+  "run": "20261125163659"
+ },
+ {
+  "t": "2026-11-25T16:38:38Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 8: commons_photo",
+  "run": "20261125163659"
+ },
+ {
+  "t": "2026-11-25T16:38:40Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 9: commons_photo",
+  "run": "20261125163659"
+ },
+ {
+  "t": "2026-11-25T16:38:41Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 10: commons_photo",
+  "run": "20261125163659"
+ },
+ {
+  "t": "2026-11-25T16:38:42Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 11: commons_photo",
+  "run": "20261125163659"
+ },
+ {
+  "t": "2026-11-25T16:38:44Z",
+  "level": "warning",
+  "stage": "footage",
+  "message": "Scene 12: original animated illustration (no stock available)",
+  "run": "20261125163659"
+ },
+ {
+  "t": "2026-11-25T16:38:45Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 13: commons_photo",
+  "run": "20261125163659"
+ },
+ {
+  "t": "2026-11-25T16:38:46Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 14: commons_photo",
+  "run": "20261125163659"
+ },
+ {
+  "t": "2026-11-25T16:38:47Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 15: commons_photo",
+  "run": "20261125163659"
+ },
+ {
+  "t": "2026-11-25T16:38:49Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 16: commons_photo",
+  "run": "20261125163659"
+ },
+ {
+  "t": "2026-11-25T16:38:51Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 17: commons_photo",
+  "run": "20261125163659"
+ },
+ {
+  "t": "2026-11-25T16:38:53Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 18: commons_photo",
+  "run": "20261125163659"
+ },
+ {
+  "t": "2026-11-25T16:38:54Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 19: commons_photo",
+  "run": "20261125163659"
+ },
+ {
+  "t": "2026-11-25T16:38:55Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 20: commons_photo",
+  "run": "20261125163659"
+ },
+ {
+  "t": "2026-11-25T16:38:57Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 21: commons_photo",
+  "run": "20261125163659"
+ },
+ {
+  "t": "2026-11-25T16:38:59Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 22: commons_photo",
+  "run": "20261125163659"
+ },
+ {
+  "t": "2026-11-25T16:39:00Z",
+  "level": "warning",
+  "stage": "footage",
+  "message": "Scene 23: original animated illustration (no stock available)",
+  "run": "20261125163659"
+ },
+ {
+  "t": "2026-11-25T16:39:01Z",
+  "level": "warning",
+  "stage": "footage",
+  "message": "Scene 24: original animated illustration (no stock available)",
+  "run": "20261125163659"
+ },
+ {
+  "t": "2026-11-25T16:39:02Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 25: commons_photo",
+  "run": "20261125163659"
+ },
+ {
+  "t": "2026-11-25T16:39:02Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "1/25 moving stock clips; 20 animated licensed photos; 4 original illustrated scenes",
+  "run": "20261125163659"
+ },
+ {
+  "t": "2026-11-25T16:43:18Z",
+  "level": "info",
+  "stage": "render",
+  "message": "1920x1080 432.0s audio=True",
+  "run": "20261125163659"
+ },
+ {
+  "t": "2026-11-25T16:43:18Z",
+  "level": "info",
+  "stage": "thumbnail",
+  "message": "title score 94; thumbnail text 'DON'T USE IT'",
+  "run": "20261125163659"
+ },
+ {
+  "t": "2026-11-25T16:43:18Z",
+  "level": "info",
+  "stage": "seo",
+  "message": "5 tags; description 4900 chars; uncovered queries: ['supernatural story', 'The Town That Returned Lost Minutes']",
+  "run": "20261125163659"
  }
 ]
