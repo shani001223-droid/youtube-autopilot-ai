@@ -1,0 +1,51 @@
+[
+ {
+  "date": "2026-11-23",
+  "weekday": "mon",
+  "format": "short",
+  "time": "18:00",
+  "status": "planned"
+ },
+ {
+  "date": "2026-11-24",
+  "weekday": "tue",
+  "format": "short",
+  "time": "18:00",
+  "status": "planned"
+ },
+ {
+  "date": "2026-11-25",
+  "weekday": "wed",
+  "format": "short",
+  "time": "18:00",
+  "status": "planned"
+ },
+ {
+  "date": "2026-11-26",
+  "weekday": "thu",
+  "format": "short",
+  "time": "18:00",
+  "status": "planned"
+ },
+ {
+  "date": "2026-11-27",
+  "weekday": "fri",
+  "format": "short",
+  "time": "18:00",
+  "status": "planned"
+ },
+ {
+  "date": "2026-11-28",
+  "weekday": "sat",
+  "format": "short",
+  "time": "18:00",
+  "status": "planned"
+ },
+ {
+  "date": "2026-11-29",
+  "weekday": "sun",
+  "format": "short",
+  "time": "18:00",
+  "status": "planned"
+ }
+]
