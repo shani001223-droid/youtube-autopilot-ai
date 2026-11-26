@@ -1084,5 +1084,131 @@
   "created_at": "2026-11-26T12:47:36Z",
   "failed_stage": "script",
   "error": "ScriptError: model did not return a JSON object"
+ },
+ {
+  "status": "awaiting_approval",
+  "mode": "short",
+  "profile": "hindi_shorts",
+  "language": "hi",
+  "run_id": "20261126215708",
+  "demo": false,
+  "id": "20261126-215708-5c39",
+  "created_at": "2026-11-26T21:57:08Z",
+  "topic": "The Cartography of an Empty Room",
+  "premise": "An architectural surveyor is hired to map a sprawling ancestral haveli where every room must be measured by specific, bizarre rules to prevent the walls from closing in. The final rule reveals that the house isn't built on land, but inside the dormant skull of an ancient entity waking up.",
+  "variety": {
+   "subgenre": "cosmic unease",
+   "structure": "a list of rules that gets darker",
+   "visual_style": "rain and streetlights",
+   "music_mood": "hollow"
+  },
+  "title": "बंद कमरा",
+  "thumb_text": "नक्शा गलत है",
+  "title_issues": [
+   [
+    "no-number",
+    "no number, date or name - the most reliable single fix"
+   ],
+   [
+    "front-load",
+    "the first three words are all filler - move the subject forward"
+   ]
+  ],
+  "description": "An architectural surveyor mapping a decaying haveli must follow bizarre measuring rules to keep the walls from closing in, only to discover the entire building rests inside the dormant skull of a colossal underground entity.\nनई मौलिक डरावनी कहानियों के लिए चैनल को सब्सक्राइब करें।\n\nThis is a work of fiction. The story and narration are AI-assisted; every name and event is invented.\n\nFootage:\nEFTA00001268 - View into a long empty hallway through an open doorway with light-colored walls and a dark floo — Federal Bureau of Investigation, Public domain; https://commons.wikimedia.org/wiki/File:EFTA00001268_-_View_into_a_long_empty_hallway_through_an_open_doorway_with_light-colored_walls_and_a_dark_floor.jpg  (cropped, color graded, animated)\nOvergrown interior of an abandoned house on Margarita Island, Venezuela.jpg — Wilfredor, CC0; https://commons.wikimedia.org/wiki/File:Overgrown_interior_of_an_abandoned_house_on_Margarita_Island,_Venezuela.jpg http://creativecommons.org/publicdomain/zero/1.0/deed.en (cropped, color graded, animated)\nParashar Forest Dept Rest House at night (21249561548).jpg — Ashish Gupta from Noida, India, CC BY 2.0; https://commons.wikimedia.org/wiki/File:Parashar_Forest_Dept_Rest_House_at_night_(21249561548).jpg https://creativecommons.org/licenses/by/2.0 (cropped, color graded, animated)\nRaindrops against the window in the night city, Las Palmas.webm — slavikfi (Vjatseslav Robtsenkov), CC0; https://commons.wikimedia.org/wiki/File:Raindrops_against_the_window_in_the_night_city,_Las_Palmas.webm http://creativecommons.org/publicdomain/zero/1.0/deed.en (cropped, color graded)\n\nMusic: generated for this channel.\n\n#horrorstories #mystery #shorts #hindikahani #hindihorror",
+  "tags": [
+   "hindi horror story",
+   "haunted haveli",
+   "architectural mystery",
+   "cosmic horror hindi",
+   "monsoon thriller",
+   "scary stories",
+   "audio story",
+   "dark secret",
+   "mysterious rooms",
+   "old building",
+   "cosmic unease",
+   "short story"
+  ],
+  "hook": "क्या आपने कभी किसी ऐसी इमारत का नक्शा बनाया है जिसके कमरे मापने पर सुबह कम निकलते हैं?",
+  "hook_score": 11,
+  "hook_formula": "The Question",
+  "script": {
+   "scenes": [
+    {
+     "narration": "बरसात की रात में इस पुरानी हवेली के हर कमरे को मापने के लिए कड़े नियम तय किए गए थे।",
+     "visual_query": "rain soaked stone haveli courtyard",
+     "mood": "dread",
+     "visual_prompt": "Cinematic wide establishing shot of a crumbling stone haveli courtyard under heavy monsoon rain and dim amber streetlights, dark indigo shadows, high contrast, photorealistic."
+    },
+    {
+     "narration": "पहली चेतावनी थी कि कोने की दीवार को छूते ही पीतल की जंजीर को उल्टा घुमाना होगा।",
+     "visual_query": "oxidized brass measuring chain",
+     "mood": "dread",
+     "visual_prompt": "Close-up detail shot of a heavy oxidized brass measuring chain resting on wet stone floor, amber streetlamp reflection in water puddles, shallow depth of field."
+    },
+    {
+     "narration": "दूसरा नियम कहता था कि लंबाई नापते वक्त परछाई कभी भी पश्चिम की ओर नहीं गिरनी चाहिए।",
+     "visual_query": "fading shadow on damp wall",
+     "mood": "dread",
+     "visual_prompt": "Low-angle medium shot of a long warped shadow stretching across a damp lime-plastered wall, flickering amber streetlighting through iron barred window."
+    },
+    {
+     "narration": "लेकिन जब मैंने आखिरी कमरे का क्षेत्रफल निकाला, तो गणित पूरी तरह बदल गया।",
+     "visual_query": "architectural blueprint paper wet",
+     "mood": "dread",
+     "visual_prompt": "Overhead detail shot of a rolled architectural blueprint getting damp on a dark wooden floor, charcoal ink slightly blurred by moisture."
+    },
+    {
+     "narration": "ये दीवारें ईंट और गारे से नहीं, बल्कि किसी विशाल प्राणी की सांस लेने वाली पसलियों से बनी हैं।",
+     "visual_query": "dark stone corridor archway",
+     "mood": "dread",
+     "visual_prompt": "Symmetrical tunnel shot looking down a narrow decaying stone corridor, arched doorways receding into absolute darkness, moody cinematic lighting."
+    }
+   ],
+   "closing_line": "हम किसी जमीन पर नहीं, बल्कि उसकी जागती हुई खोपड़ी के भीतर नक्शा बना रहे थे।",
+   "loop_line": "क्या आपने कभी किसी ऐसी इमारत का नक्शा बनाया है जिसके कमरे मापने पर सुबह कम निकलते हैं?"
+  },
+  "credits": [
+   "Parashar Forest Dept Rest House at night (21249561548).jpg — Ashish Gupta from Noida, India, CC BY 2.0; https://commons.wikimedia.org/wiki/File:Parashar_Forest_Dept_Rest_House_at_night_(21249561548).jpg https://creativecommons.org/licenses/by/2.0 (cropped, color graded, animated)",
+   "EFTA00001268 - View into a long empty hallway through an open doorway with light-colored walls and a dark floo — Federal Bureau of Investigation, Public domain; https://commons.wikimedia.org/wiki/File:EFTA00001268_-_View_into_a_long_empty_hallway_through_an_open_doorway_with_light-colored_walls_and_a_dark_floor.jpg  (cropped, color graded, animated)",
+   "Raindrops against the window in the night city, Las Palmas.webm — slavikfi (Vjatseslav Robtsenkov), CC0; https://commons.wikimedia.org/wiki/File:Raindrops_against_the_window_in_the_night_city,_Las_Palmas.webm http://creativecommons.org/publicdomain/zero/1.0/deed.en (cropped, color graded)",
+   "Overgrown interior of an abandoned house on Margarita Island, Venezuela.jpg — Wilfredor, CC0; https://commons.wikimedia.org/wiki/File:Overgrown_interior_of_an_abandoned_house_on_Margarita_Island,_Venezuela.jpg http://creativecommons.org/publicdomain/zero/1.0/deed.en (cropped, color graded, animated)"
+  ],
+  "video_info": {
+   "width": 1080,
+   "height": 1920,
+   "duration": 58.551,
+   "has_video": true,
+   "has_audio": true
+  },
+  "visual_sources": [
+   "commons_photo",
+   "commons_photo",
+   "commons_video",
+   "commons_photo",
+   "illustration"
+  ],
+  "qa": {
+   "ok": true,
+   "gap_seconds": 0.0,
+   "visual": {
+    "sources": {
+     "commons_photo": 3,
+     "commons_video": 1,
+     "illustration": 1
+    },
+    "repeated_queries": 0,
+    "scene_count": 5,
+    "requires_visual_review": true
+   }
+  },
+  "files": {
+   "video": "out/20261126-215708-5c39/video.mp4",
+   "thumb": "out/20261126-215708-5c39/thumb.jpg"
+  },
+  "preview_url": "https://github.com/shani001223-droid/youtube-autopilot-ai/releases/download/preview-20261126-215708-5c39/video.mp4",
+  "error": null,
+  "script_source": "gemini",
+  "thumb_url": "https://github.com/shani001223-droid/youtube-autopilot-ai/releases/download/preview-20261126-215708-5c39/thumb.jpg"
  }
 ]
