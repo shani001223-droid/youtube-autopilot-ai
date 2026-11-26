@@ -992,5 +992,19 @@
   "stage": "seo",
   "message": "5 tags; description 4900 chars; uncovered queries: ['supernatural story', 'The Town That Returned Lost Minutes']",
   "run": "20261125163659"
+ },
+ {
+  "t": "2026-11-26T12:47:39Z",
+  "level": "info",
+  "stage": "research",
+  "message": "topic 'Static on the Highway' | psychological | one phone call, in real time | 0 trend titles",
+  "run": "20261126124736"
+ },
+ {
+  "t": "2026-11-26T12:47:47Z",
+  "level": "error",
+  "stage": "script",
+  "message": "ScriptError: model did not return a JSON object",
+  "run": "20261126124736"
  }
 ]
