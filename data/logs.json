@@ -1188,5 +1188,96 @@
   "stage": "render",
   "message": "GateError: Rendered video failed resolution/audio/duration quality gate",
   "run": "20261127123944"
+ },
+ {
+  "t": "2026-11-27T21:39:40Z",
+  "level": "info",
+  "stage": "research",
+  "message": "topic 'The Loom of Whispering Threads' | supernatural | two timelines that collide | 0 trend titles",
+  "run": "20261127213937"
+ },
+ {
+  "t": "2026-11-27T21:39:44Z",
+  "level": "info",
+  "stage": "script",
+  "message": "6 scenes; hook score 11 (WEAK, The Question)",
+  "run": "20261127213937"
+ },
+ {
+  "t": "2026-11-27T21:39:44Z",
+  "level": "info",
+  "stage": "voice",
+  "message": "8 sentences, 60.4s narration, longest gap 0.00s",
+  "run": "20261127213937"
+ },
+ {
+  "t": "2026-11-27T21:39:44Z",
+  "level": "warning",
+  "stage": "footage",
+  "message": "PEXELS_API_KEY missing; using keyless licensed media search",
+  "run": "20261127213937"
+ },
+ {
+  "t": "2026-11-27T21:39:46Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 1: commons_photo",
+  "run": "20261127213937"
+ },
+ {
+  "t": "2026-11-27T21:39:47Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 2: commons_photo",
+  "run": "20261127213937"
+ },
+ {
+  "t": "2026-11-27T21:39:49Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 3: commons_photo",
+  "run": "20261127213937"
+ },
+ {
+  "t": "2026-11-27T21:39:51Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 4: commons_photo",
+  "run": "20261127213937"
+ },
+ {
+  "t": "2026-11-27T21:39:52Z",
+  "level": "warning",
+  "stage": "footage",
+  "message": "Scene 5: original animated illustration (no stock available)",
+  "run": "20261127213937"
+ },
+ {
+  "t": "2026-11-27T21:39:54Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 6: commons_photo",
+  "run": "20261127213937"
+ },
+ {
+  "t": "2026-11-27T21:39:54Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "0/6 moving stock clips; 5 animated licensed photos; 1 original illustrated scenes",
+  "run": "20261127213937"
+ },
+ {
+  "t": "2026-11-27T21:41:00Z",
+  "level": "info",
+  "stage": "render",
+  "message": "1080x1920 61.0s audio=True",
+  "run": "20261127213937"
+ },
+ {
+  "t": "2026-11-27T21:41:00Z",
+  "level": "error",
+  "stage": "render",
+  "message": "GateError: Rendered video failed resolution/audio/duration quality gate",
+  "run": "20261127213937"
  }
 ]
