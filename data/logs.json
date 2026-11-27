@@ -1097,5 +1097,96 @@
   "stage": "seo",
   "message": "12 tags; description 1713 chars; uncovered queries: ['cosmic unease story', 'The Cartography of an Empty Room']",
   "run": "20261126215708"
+ },
+ {
+  "t": "2026-11-27T12:39:47Z",
+  "level": "info",
+  "stage": "research",
+  "message": "topic 'The Silent PCO Booth' | small-town secrets | two timelines that collide | 0 trend titles",
+  "run": "20261127123944"
+ },
+ {
+  "t": "2026-11-27T12:39:56Z",
+  "level": "info",
+  "stage": "script",
+  "message": "6 scenes; hook score 39 (WEAK, Unclassified)",
+  "run": "20261127123944"
+ },
+ {
+  "t": "2026-11-27T12:39:56Z",
+  "level": "info",
+  "stage": "voice",
+  "message": "8 sentences, 64.3s narration, longest gap 0.00s",
+  "run": "20261127123944"
+ },
+ {
+  "t": "2026-11-27T12:39:56Z",
+  "level": "warning",
+  "stage": "footage",
+  "message": "PEXELS_API_KEY missing; using keyless licensed media search",
+  "run": "20261127123944"
+ },
+ {
+  "t": "2026-11-27T12:39:57Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 1: commons_photo",
+  "run": "20261127123944"
+ },
+ {
+  "t": "2026-11-27T12:39:58Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 2: commons_photo",
+  "run": "20261127123944"
+ },
+ {
+  "t": "2026-11-27T12:40:00Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 3: commons_video",
+  "run": "20261127123944"
+ },
+ {
+  "t": "2026-11-27T12:40:01Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "Scene 4: commons_photo",
+  "run": "20261127123944"
+ },
+ {
+  "t": "2026-11-27T12:40:02Z",
+  "level": "warning",
+  "stage": "footage",
+  "message": "Scene 5: original animated illustration (no stock available)",
+  "run": "20261127123944"
+ },
+ {
+  "t": "2026-11-27T12:40:04Z",
+  "level": "warning",
+  "stage": "footage",
+  "message": "Scene 6: original animated illustration (no stock available)",
+  "run": "20261127123944"
+ },
+ {
+  "t": "2026-11-27T12:40:04Z",
+  "level": "info",
+  "stage": "footage",
+  "message": "1/6 moving stock clips; 3 animated licensed photos; 2 original illustrated scenes",
+  "run": "20261127123944"
+ },
+ {
+  "t": "2026-11-27T12:40:47Z",
+  "level": "info",
+  "stage": "render",
+  "message": "1080x1920 64.9s audio=True",
+  "run": "20261127123944"
+ },
+ {
+  "t": "2026-11-27T12:40:47Z",
+  "level": "error",
+  "stage": "render",
+  "message": "GateError: Rendered video failed resolution/audio/duration quality gate",
+  "run": "20261127123944"
  }
 ]
