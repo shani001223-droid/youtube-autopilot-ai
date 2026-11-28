@@ -1234,5 +1234,131 @@
   "created_at": "2026-11-27T21:39:37Z",
   "failed_stage": "render",
   "error": "GateError: Rendered video failed resolution/audio/duration quality gate"
+ },
+ {
+  "status": "awaiting_approval",
+  "mode": "short",
+  "profile": "hindi_shorts",
+  "language": "hi",
+  "run_id": "20261128115642",
+  "demo": false,
+  "id": "20261128-115642-724d",
+  "created_at": "2026-11-28T11:56:42Z",
+  "topic": "ट्रंक कॉल (Trunk Call)",
+  "premise": "An exhausted night-shift operator at a defunct manual telephone exchange in a Himachal valley receives a sudden call from a trunk line that was disconnected forty years ago during a landslide. The voice on the other end is a young woman trapped inside the collapsing exchange building, begging for help that the operator must try to orchestrate through decades of static.",
+  "variety": {
+   "subgenre": "small-town secrets",
+   "structure": "one phone call, in real time",
+   "visual_style": "fields at dusk",
+   "music_mood": "pulse"
+  },
+  "title": "जब पुरानी लाइन पर घंटी बजी",
+  "thumb_text": "چالیس سال پرانا",
+  "title_issues": [
+   [
+    "no-number",
+    "no number, date or name - the most reliable single fix"
+   ],
+   [
+    "front-load",
+    "the first three words are all filler - move the subject forward"
+   ]
+  ],
+  "description": "An exhausted night-shift operator receives a trunk call from a line disconnected forty years ago, forcing him to guide a trapped voice through decades of static.\nनई मौलिक डरावनी कहानियों के लिए चैनल को सब्सक्राइब करें।\n\nThis is a work of fiction. The story and narration are AI-assisted; every name and event is invented.\n\nFootage:\nDesk (20967117944).jpg — William Warby from London, England, CC BY 2.0; https://commons.wikimedia.org/wiki/File:Desk_(20967117944).jpg https://creativecommons.org/licenses/by/2.0 (cropped, color graded, animated)\nOvergrown interior of an abandoned house on Margarita Island, Venezuela.jpg — Wilfredor, CC0; https://commons.wikimedia.org/wiki/File:Overgrown_interior_of_an_abandoned_house_on_Margarita_Island,_Venezuela.jpg http://creativecommons.org/publicdomain/zero/1.0/deed.en (cropped, color graded, animated)\nParashar Forest Dept Rest House at night (21249561548).jpg — Ashish Gupta from Noida, India, CC BY 2.0; https://commons.wikimedia.org/wiki/File:Parashar_Forest_Dept_Rest_House_at_night_(21249561548).jpg https://creativecommons.org/licenses/by/2.0 (cropped, color graded, animated)\nRaindrops against the window in the night city, Las Palmas.webm — slavikfi (Vjatseslav Robtsenkov), CC0; https://commons.wikimedia.org/wiki/File:Raindrops_against_the_window_in_the_night_city,_Las_Palmas.webm http://creativecommons.org/publicdomain/zero/1.0/deed.en (cropped, color graded)\nVocarola loudspeaker.png — Unknown authorUnknown author, Public domain; https://commons.wikimedia.org/wiki/File:Vocarola_loudspeaker.png  (cropped, color graded, animated)\n\nMusic: generated for this channel.\n\n#horrorstories #mystery #shorts #hindikahani #hindihorror",
+  "tags": [
+   "horror story hindi",
+   "trunk call mystery",
+   "himachal horror",
+   "vintage phone suspense",
+   "slow burn dread",
+   "short horror video",
+   "mysterious telephone",
+   "ghostly call",
+   "hindi audio story",
+   "creepy switchboard",
+   "small-town secrets",
+   "short story"
+  ],
+  "hook": "जब मैनुअल एक्सचेंज का पुराना बोर्ड अपने आप जल उठा, तो मैंने एक भूली हुई लाइन पर प्लग लगा दिया.",
+  "hook_score": 25,
+  "hook_formula": "Unclassified",
+  "script": {
+   "scenes": [
+    {
+     "narration": "पहाड़ी के इस बंद पड़े एक्सचेंज में रात के सन्नाटे को चीरती हुई ट्रंक लाइन की घंटी बज उठी।",
+     "visual_query": "dusty manual telephone switchboard",
+     "mood": "dread",
+     "visual_prompt": "Cinematic wide angle of a dusty manual telephone switchboard in a dark Himachal exchange room, amber desk lamp glowing, dusk light through dirty window, photorealistic."
+    },
+    {
+     "narration": "मैंने जैक प्लग लगाया तो दूसरी तरफ सिर्फ भारी सन्नाटा और चालीस साल पुरानी सरसराहट थी।",
+     "visual_query": "old brass telephone plug",
+     "mood": "dread",
+     "visual_prompt": "Macro detail shot of an old brass telephone plug being pushed into a dusty switchboard socket, dramatic side lighting, shallow depth of field."
+    },
+    {
+     "narration": "कांपती हुई आवाज ने कहा कि बाहर मलबा गिर रहा है और कमरा बंद होता जा रहा है।",
+     "visual_query": "cracked glass window dusk",
+     "mood": "dread",
+     "visual_prompt": "Medium shot of a cracked glass window showing misty pine trees at dusk, pale blue and amber tones, quiet atmospheric tension."
+    },
+    {
+     "narration": "मैंने रजिस्टर पलटा तो वह लाइन भूस्खलन में दबे उस केबिन की थी जो दशकों पहले मिट चुका था।",
+     "visual_query": "weathered paper logbook",
+     "mood": "dread",
+     "visual_prompt": "Close up of a weathered paper logbook with faded handwriting and ink stains, illuminated by a single warm bulb, cinematic shadows."
+    },
+    {
+     "narration": "सरसराहट के बीच उसकी आखिरी चीख के साथ मेरा खुद का फोन रिसीवर बजने लगा।",
+     "visual_query": "black rotary telephone desk",
+     "mood": "dread",
+     "visual_prompt": "Close-up of an old black rotary telephone sitting on a wooden desk, dusty surface, moody low-key lighting from a distant window."
+    }
+   ],
+   "closing_line": "घंटी मैंने नहीं, मेरे ही दफ्तर से चालीस साल पहले बजाई गई थी।",
+   "loop_line": "क्या आपने कभी ऐसे नंबर से फोन आते देखा है जो दशकों पहले बंद हो चुका हो?"
+  },
+  "credits": [
+   "Parashar Forest Dept Rest House at night (21249561548).jpg — Ashish Gupta from Noida, India, CC BY 2.0; https://commons.wikimedia.org/wiki/File:Parashar_Forest_Dept_Rest_House_at_night_(21249561548).jpg https://creativecommons.org/licenses/by/2.0 (cropped, color graded, animated)",
+   "Vocarola loudspeaker.png — Unknown authorUnknown author, Public domain; https://commons.wikimedia.org/wiki/File:Vocarola_loudspeaker.png  (cropped, color graded, animated)",
+   "Raindrops against the window in the night city, Las Palmas.webm — slavikfi (Vjatseslav Robtsenkov), CC0; https://commons.wikimedia.org/wiki/File:Raindrops_against_the_window_in_the_night_city,_Las_Palmas.webm http://creativecommons.org/publicdomain/zero/1.0/deed.en (cropped, color graded)",
+   "Overgrown interior of an abandoned house on Margarita Island, Venezuela.jpg — Wilfredor, CC0; https://commons.wikimedia.org/wiki/File:Overgrown_interior_of_an_abandoned_house_on_Margarita_Island,_Venezuela.jpg http://creativecommons.org/publicdomain/zero/1.0/deed.en (cropped, color graded, animated)",
+   "Desk (20967117944).jpg — William Warby from London, England, CC BY 2.0; https://commons.wikimedia.org/wiki/File:Desk_(20967117944).jpg https://creativecommons.org/licenses/by/2.0 (cropped, color graded, animated)"
+  ],
+  "video_info": {
+   "width": 1080,
+   "height": 1920,
+   "duration": 56.133333,
+   "has_video": true,
+   "has_audio": true
+  },
+  "visual_sources": [
+   "commons_photo",
+   "commons_photo",
+   "commons_video",
+   "commons_photo",
+   "commons_photo"
+  ],
+  "qa": {
+   "ok": true,
+   "gap_seconds": 0.0,
+   "visual": {
+    "sources": {
+     "commons_photo": 4,
+     "commons_video": 1
+    },
+    "repeated_queries": 0,
+    "scene_count": 5,
+    "requires_visual_review": true
+   }
+  },
+  "files": {
+   "video": "out/20261128-115642-724d/video.mp4",
+   "thumb": "out/20261128-115642-724d/thumb.jpg"
+  },
+  "preview_url": "https://github.com/shani001223-droid/youtube-autopilot-ai/releases/download/preview-20261128-115642-724d/video.mp4",
+  "error": null,
+  "script_source": "gemini",
+  "thumb_url": "https://github.com/shani001223-droid/youtube-autopilot-ai/releases/download/preview-20261128-115642-724d/thumb.jpg"
  }
 ]
